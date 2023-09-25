@@ -139,12 +139,12 @@ steps:
     title: Testing PR...
     type: codefresh-run
     arguments:
-      PIPELINE_ID: "Example Voting App/dvts"
+      PIPELINE_ID: "Codefresh Demo App/codefresh-demo-app-dvts"
       TRIGGER_ID: dvts
       BRANCH: main
       ENABLE_NOTIFICATIONS: true
       CONTEXT:
-        - github
+        - salesdemocf
       VARIABLE:
         - KUBE_CONTEXT=poc-demo-1
         - RELEASE_NAME=eva-pr-${{CF_PULL_REQUEST_NUMBER}}
