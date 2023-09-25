@@ -95,7 +95,7 @@ steps:
   HelmChartPackage:
     title: Packaging Helm Chart..
     image: alpine/helm:3.9.4
-    working_directory: ${{GITCloneSource}}/${{CF_REPO_NAME}}
+    working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
     commands:
       - helm package .
     stage: 'Package Chart'
@@ -105,7 +105,7 @@ steps:
     type: helm
     arguments:
       action: push
-      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{CHART_NAME}}
+      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{HELM_CHART_PATH}}
       helm_version: 3.9.0
       helm_repository_context: codedev-artifactory
       credentials_in_arguments: true
@@ -124,7 +124,7 @@ steps:
     type: helm
     arguments:
       action: install
-      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{CHART_NAME}}
+      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{HELM_CHART_PATH}}
       release_name: eva-pr-${{CF_PULL_REQUEST_NUMBER}}
       helm_version: 3.9.0
       kube_context: poc-demo-1
