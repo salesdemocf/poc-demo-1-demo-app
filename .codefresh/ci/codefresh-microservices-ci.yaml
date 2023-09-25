@@ -182,16 +182,14 @@ steps:
         depends_on:
           - vote 
     stage: 'Run Integration Tests'
-
+    
   UploadTestReports:
-    title: Uploading Test Reports...
-    image: codefresh/cf-docker-test-reporting
-    working_directory: '${{CF_VOLUME_PATH}}'
-    environment:
-      - BUCKET_NAME=${{BUCKET_NAME}}
-      - CF_STORAGE_INTEGRATION=amazon
-      - ALLURE_DIR.0=${{CF_REPO_NAME}}/allure-results
-      - REPORT_TYPE.0=mocha
-      - ALLURE_DIR.1=allure-results
-      - REPORT_TYPE.1=allure
+    title: Upload Allure Report
+    type: test-reporting
+    fail_fast: false
+    arguments:
+      allure_dir: /${{CF_VOLUME_PATH}}/allure-results
+      bucket_name: ${{BUCKET_NAME}}
+      storage_integration: amazon
+      branch: ${{CF_BRANCH_TAG_NORMALIZED}}
     stage: 'Upload Test Reports'
