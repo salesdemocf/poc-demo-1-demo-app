@@ -1,12 +1,12 @@
 result:
   image:
-    repository: quay.io/codefresh-contrib/result
+    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/result
     tag: stable
 vote:
   image:
-    repository: quay.io/codefresh-contrib/vote
+    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/vote
     tag: stable
 worker:
   image:
-    repository: quay.io/codefresh-contrib/worker
+    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/worker
     tag: stable
