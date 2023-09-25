@@ -14,7 +14,7 @@ steps:
     arguments:
       repo: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
       revision: ${{CF_REVISION}}
-      git: github
+      git: salesdemocf
     stage: 'Clone Source Code Repo'
 
   BuildDockerfiles:
