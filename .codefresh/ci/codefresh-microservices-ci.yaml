@@ -2,7 +2,6 @@ version: '1.0'
 
 stages:
   - 'Clone Source Code Repo'
-  - 'Run Unit Tests'
   - 'Build Docker Images'
   - 'Run Integration Tests'
   - 'Upload Test Reports'
@@ -18,16 +17,6 @@ steps:
       git: github
     stage: 'Clone Source Code Repo'
 
-  TestNPMAngular:
-    Title: Running Unit Tests...
-    image: trion/ng-cli-karma
-    #working_directory: ${{GITClone}}/mock-tests
-    commands:
-      - cd /codefresh/volume/example-voting-app/mock-tests
-      - npm i
-      - ng test
-    stage: 'Run Unit Tests'
-
   BuildDockerfiles:
     title: Building Required Docker Images
     type: parallel
@@ -38,14 +27,14 @@ steps:
         working_directory: ${{GITClone}}/${{MICROSERVICE}}/
         image_name: ${{MICROSERVICE}}
         tag: ${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
-        registry: aperture-sci
+        registry: codedev-artifactory
       DockerBuildTests:
         title: Building Tests Docker Image
         type: build
         working_directory: ${{GITClone}}/tests/
         image_name: tests
         tag: ${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
-        registry: aperture-sci
+        registry: codedev-artifactory
     stage: 'Build Docker Images'
 
   SetMicroserviceImage:
@@ -55,14 +44,12 @@ steps:
       image: quay.io/codefresh/cli
       shell: bash
       commands:
-        - cf_export VOTE_IMAGE=aperturesci.jfrog.io/demo-docker/vote:stable
-        - cf_export RESULT_IMAGE=aperturesci.jfrog.io/demo-docker/result:stable
-        - cf_export WORKER_IMAGE=aperturesci.jfrog.io/demo-docker/worker:stable
-        - cf_export $(echo "${{MICROSERVICE}}" | awk '{print toupper($0)}')_IMAGE=aperturesci.jfrog.io/demo-docker/${{MICROSERVICE}}:${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+        - cf_export VOTE_IMAGE=${{ARTIFACTORY_REGISTRY}}/vote:stable
+        - cf_export RESULT_IMAGE=${{ARTIFACTORY_REGISTRY}}/result:stable
+        - cf_export WORKER_IMAGE=${{ARTIFACTORY_REGISTRY}}/worker:stable
+        - cf_export $(echo "${{MICROSERVICE}}" | awk '{print toupper($0)}')_IMAGE=${{ARTIFACTORY_REGISTRY}}/${{MICROSERVICE}}:${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
         
     stage: 'Run Integration Tests'
-
-  # TODO: Add PhantomJS Example
 
   RunIntegrationTests:
     title: Running Integration Tests
@@ -201,8 +188,8 @@ steps:
     image: codefresh/cf-docker-test-reporting
     working_directory: '${{CF_VOLUME_PATH}}'
     environment:
-      - BUCKET_NAME=aperture-sci
-      - CF_STORAGE_INTEGRATION=google
+      - BUCKET_NAME=${{BUCKET_NAME}}
+      - CF_STORAGE_INTEGRATION=amazon
       - ALLURE_DIR.0=${{CF_REPO_NAME}}/allure-results
       - REPORT_TYPE.0=mocha
       - ALLURE_DIR.1=allure-results
