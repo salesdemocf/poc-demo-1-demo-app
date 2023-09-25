@@ -79,7 +79,7 @@ steps:
   HelmChartDependencyUpdate:
     title: Pulling Helm Chart Dependencies...
     image: alpine/helm:3.9.4
-    working_directory: ${{GITCloneSource}}/${{CF_REPO_NAME}}
+    working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
     commands:
       - helm dep update 
     stage: 'Update Chart Dependencies'
@@ -87,7 +87,7 @@ steps:
   HelmChartLint:
     title: Linting Helm Chart...
     image: alpine/helm:3.9.4
-    working_directory: ${{GITCloneSource}}/${{CF_REPO_NAME}}
+    working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
     commands:
       - helm lint .
     stage: 'Lint Chart'
