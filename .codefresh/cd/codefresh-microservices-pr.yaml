@@ -19,7 +19,7 @@ steps:
     arguments:
       repo: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
       revision: ${{CF_REVISION}}
-      git: github
+      git: salesdemocf
     stage: 'Clone Source Code Repo'
 
   BuildDockerfiles:
@@ -32,14 +32,14 @@ steps:
         working_directory: ${{GITCloneSource}}/${{MICROSERVICE}}/
         image_name: ${{MICROSERVICE}}
         tag: pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
-        registry: aperture-sci
+        registry: codedev-artifactory
       DockerBuildTests:
         title: Building Tests Docker Image...
         type: build
         working_directory: ${{GITCloneSource}}/tests/
         image_name: tests
         tag: pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
-        registry: aperture-sci
+        registry: codedev-artifactory
     stage: 'Build Docker Images'
 
   HelmChartBumpVersions:
@@ -52,11 +52,12 @@ steps:
       - echo "Current ${{MICROSERVICE}} Chart Version - ${CURRENT_MICROSERVICE_CHART_VERSION}"
       - cf_export NEW_MICROSERVICE_CHART_VERSION=`echo "${CURRENT_MICROSERVICE_CHART_VERSION}" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
       - curl -L "https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz" -o helm.tar.gz && tar -zxvf helm.tar.gz && mv ./linux-amd64/helm /usr/local/bin/helm 
-      - helm repo add demo-helm https://aperturesci.jfrog.io/artifactory/api/helm/demo-helm --username aperture@codefresh.io --password cmVmdGtuOjAxOjE3MjM1ODQxMzQ6cEVJMFRVYVMxZVZqaFpKenBsVFhNNWxjb1Zu
-      - export CURRENT_CHART_VERSION=`helm search repo demo-helm/${{CHART_NAME}} | awk 'FNR==2{print $2}'`
+      - helm repo add demo-helm https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local --username salesdemocf --password ${{ARTIFACTORY_PASSWORD}}
+      - export CURRENT_CHART_VERSION=`helm search repo poc-demo-1-helm-local/${{CHART_NAME}} | awk 'FNR==2{print $2}'`
       - echo "New ${{CHART_NAME}} Chart Version - ${CURRENT_CHART_VERSION}"
       - cf_export NEW_CHART_VERSION=`echo $CURRENT_CHART_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
     stage: 'Bump Chart Version'
+
   HelmChartWriteNewVersions:
     title: Writing Helm Chart Versions...
     image: mikefarah/yq:4.35.1
@@ -106,16 +107,16 @@ steps:
       action: push
       chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{CHART_NAME}}
       helm_version: 3.9.0
-      helm_repository_context: aperture-sci-artifactory
+      helm_repository_context: codedev-artifactory
       credentials_in_arguments: true
     stage: 'Push Chart'
 
   GITCloneEnvironments:
     title: Cloning Environments Repository...
     type: git-clone
-    repo: 'aperture-sci/environments'
+    repo: '${{CF_REPO_OWNER}}/poc-demo-1-environments'
     revision: 'main'
-    git: github
+    git: salesdemocf
     stage: 'Clone Environments Repo'
   
   DeployPR:
@@ -126,8 +127,8 @@ steps:
       chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{CHART_NAME}}
       release_name: eva-pr-${{CF_PULL_REQUEST_NUMBER}}
       helm_version: 3.9.0
-      kube_context: kubecon-dev
-      namespace: eva-prs
+      kube_context: poc-demo-1
+      namespace: cf-demo-app-prs
       skip_cf_stable_helm_repo: true
       credentials_in_arguments: true
       custom_value_files:
@@ -145,9 +146,9 @@ steps:
       CONTEXT:
         - github
       VARIABLE:
-        - KUBE_CONTEXT=kubecon-dev
+        - KUBE_CONTEXT=poc-demo-1
         - RELEASE_NAME=eva-pr-${{CF_PULL_REQUEST_NUMBER}}
-        - NAMESPACE=eva-prs
-        - TEST_IMAGE=aperturesci.jfrog.io/demo-docker/tests:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+        - NAMESPACE=cf-demo-app-prs
+        - TEST_IMAGE=${{ARTIFACTORY_REPOSITORY}}/tests:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
         - CF_REVISION=${{CF_REVISION}}
     stage: 'Test PR'
