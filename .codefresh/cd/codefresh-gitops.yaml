@@ -24,12 +24,8 @@ steps:
   clone_source_repo:
     title: Cloning Source Repository
     type: git-clone
-    repo: ${{CF_REPO_OWNER}}/${{SOURCE_REPO}}
+    repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
     revision: main
-    when:
-      condition:
-        all:
-          SourceRepoExists: 'includes("${{SOURCE_REPO}}", "{{SOURCE_REPO}}") == false'
     stage: clone
 
   determine_candidate_source:
