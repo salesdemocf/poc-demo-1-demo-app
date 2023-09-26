@@ -122,4 +122,5 @@ steps:
       commit_message: Committed Promotion Candidate ${{CANDIDATE_IMAGE_TAG}} to ${{TARGET_FILE}}
       git_user_name: salesdemocf
       git_user_email: salesdemocf@gmail.com
+      rebase: true
     stage: promote_candidate
