@@ -17,8 +17,7 @@ hooks:
 
 stages:
   - clone
-  - report_update_plan
-  - wait_for_approval
+  - fetch_candidate
   - promote_candidate
 
 steps:
@@ -32,13 +31,7 @@ steps:
       condition:
         all:
           SourceRepoExists: 'includes("${{SOURCE_REPO}}", "{{SOURCE_REPO}}") == false'
-
-  clone_target_repo:
-    title: Cloning Target Repository
-    type: git-clone
-    repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
-    revision: main
-    stage: clone  
+    stage: clone
 
   determine_candidate_source:
     title: Determining Candidate Source
@@ -52,43 +45,7 @@ steps:
         else
             cf_export CANDIDATE_IMAGE_TAG=$(echo "$CF_PULL_REQUEST_HEAD_BRANCH-$CF_PULL_REQUEST_HEAD_COMMIT_SHA" | awk '{print tolower($0)}')
         fi
-    stage: report_update_plan
-
-  fetch_candidate_image_tag:
-    title: Fetching Candidate Image Tag
-    type: freestyle
-    image: mikefarah/yq:4
-    working_directory: ${{clone_source_repo}}
-    commands:
-      - cf_export CANDIDATE_IMAGE_TAG=$(cat ${{CANDIDATE_SOURCE}} | yq ${{SOURCE_FILE_IMAGE_TAG_PLACEMENT}} | awk '{print tolower($0)}')
-    stage: report_update_plan
-    when:
-      condition:
-        all:
-          SourceRepoExists: 'includes("${{SOURCE_REPO}}", "{{SOURCE_REPO}}") == false'
-
-  report_planned_candidate_updates:
-    title: Report Release Candidate
-    type: freestyle
-    image: mikefarah/yq:4
-    working_directory: ${{clone_target_repo}}
-    commands:
-      - echo "Before Changes"
-      - cat ${{TARGET_FILE}}
-      - yq -i '${{TARGET_FILE_IMAGE_TAG_PLACEMENT}} = "${{CANDIDATE_IMAGE_TAG}}"' ${{TARGET_FILE}}
-      - echo "After Changes"
-      - cat ${{TARGET_FILE}}
-    stage: report_update_plan
-    on_success:
-      annotations:
-        set:
-          - annotations:
-            - candidate_image_tag: ${{CANDIDATE_IMAGE_TAG}}
-
-  wait_for_approval:
-    title: Review Candidate Report and Approve Update Plan for Release.
-    type: pending-approval
-    stage: wait_for_approval
+    stage: fetch_candidate
 
   fetch_candidate:
     title: Fetch Release Candidate
