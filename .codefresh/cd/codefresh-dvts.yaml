@@ -51,9 +51,11 @@ steps:
       - VOTE_ENDPOINT=${{VOTE_ENDPOINT_IP}}
       - RESULT_ENDPOINT=${{RESULT_ENDPOINT_IP}}
       - SERVICES=${{TESTING_SERVICES}}"
+      - TEST_FILE_ARG=${{TEST_FILE_ARG}}
+      - TEST_FILE=${{TEST_FILE}}
     entry_point: /bin/sh
     commands:
-      - bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest $$TEST_FILE_ARG $$TEST_FILE_ARG -vvv --alluredir=${{CF_VOLUME_PATH}}/allure-results; done'
+      - bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest $TEST_FILE_ARG $TEST_FILE_ARG -vvv --alluredir=${{CF_VOLUME_PATH}}/allure-results; done'
     services:
       composition:
         selenium-event-bus:
