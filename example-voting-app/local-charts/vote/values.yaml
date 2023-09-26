@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/vote
-  tag: pr-3-update-services-update-cats-to-squirrels-7e6657d
+  tag: pr-6-update-dogs-to-mice-994724a
 redis:
   usePassword: false
 replicaCount: 1
