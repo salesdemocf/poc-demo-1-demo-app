@@ -1,12 +1,12 @@
 result:
   image:
-    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/result
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/result
     tag: stable
 vote:
   image:
-    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/vote
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
     tag: stable
 worker:
   image:
-    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/worker
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/worker
     tag: stable
