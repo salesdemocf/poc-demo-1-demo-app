@@ -1,20 +1,5 @@
 version: '1.0'
 
-hooks:
-  on_elected:
-    exec:
-      image: quay.io/codefresh/cli
-      shell: bash
-      commands:
-        - |-
-          export BUILD_STRATEGY=$(curl -X GET -H "Authorization: ${{CF_API_KEY}}" "${{CF_URL}}/api/builds/${{CF_BUILD_ID}}" | jq -r '.buildStrategy')
-          echo $BUILD_STRATEGY    
-          if [ "$BUILD_STRATEGY" == "restart-failed-steps" ] ; then
-              echo "Restarting from Failed Steps is NOT Permitted by Policy"
-              exit 1
-          fi
-        - codefresh get builds --pipeline-name="${{CF_PIPELINE_NAME}}" -o json | jq -c '[ .[] | select( .status | contains("pending-approval")) | select( .["pipeline-trigger-id"] | contains("${{CF_PIPELINE_TRIGGER_ID}}")) | .id ]' |  jq -c '.[]' | xargs -n 1 codefresh terminate || echo "No Pending Builds Found."
-
 stages:
   - clone
   - fetch_candidate
