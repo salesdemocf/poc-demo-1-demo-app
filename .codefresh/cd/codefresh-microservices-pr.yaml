@@ -133,6 +133,7 @@ steps:
       credentials_in_arguments: true
       custom_value_files:
         - /codefresh/volume/poc-demo-1-environments/eva/pullrequests/values.yaml
+      cmd_ps: '--create-namespace'
     stage: 'Deploy PR'
 
   RunDVTSOnPR:
