@@ -66,115 +66,115 @@ steps:
   #     CF_IMAGE: codedev.jfrog.io/poc-demo-1-docker-local/${{MICROSERVICE}}:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
   #   stage: Report Image Details
 
-  HelmChartBumpVersions:
-    title: Bumping Helm Chart Versions...
-    image: codefresh/cfstep-helm
-    working_directory: ${{GITCloneSource}}
-    shell: bash
-    commands:
-      - export CURRENT_MICROSERVICE_CHART_VERSION=`yq .version ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/Chart.yaml`
-      - echo "Current ${{MICROSERVICE}} Chart Version - ${CURRENT_MICROSERVICE_CHART_VERSION}"
-      - cf_export NEW_MICROSERVICE_CHART_VERSION=`echo "${CURRENT_MICROSERVICE_CHART_VERSION}" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
-      - curl -L "https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz" -o helm.tar.gz && tar -zxvf helm.tar.gz && mv ./linux-amd64/helm /usr/local/bin/helm 
-      - helm repo add demo-helm https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local --username salesdemocf --password ${{ARTIFACTORY_PASSWORD}}
-      - export CURRENT_CHART_VERSION=`helm search repo poc-demo-1-helm-local/${{CHART_NAME}} | awk 'FNR==2{print $2}'`
-      - echo "New ${{CHART_NAME}} Chart Version - ${CURRENT_CHART_VERSION}"
-      - cf_export NEW_CHART_VERSION=`echo $CURRENT_CHART_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
-    stage: 'Bump Chart Version'
+  # HelmChartBumpVersions:
+  #   title: Bumping Helm Chart Versions...
+  #   image: codefresh/cfstep-helm
+  #   working_directory: ${{GITCloneSource}}
+  #   shell: bash
+  #   commands:
+  #     - export CURRENT_MICROSERVICE_CHART_VERSION=`yq .version ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/Chart.yaml`
+  #     - echo "Current ${{MICROSERVICE}} Chart Version - ${CURRENT_MICROSERVICE_CHART_VERSION}"
+  #     - cf_export NEW_MICROSERVICE_CHART_VERSION=`echo "${CURRENT_MICROSERVICE_CHART_VERSION}" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
+  #     - curl -L "https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz" -o helm.tar.gz && tar -zxvf helm.tar.gz && mv ./linux-amd64/helm /usr/local/bin/helm 
+  #     - helm repo add demo-helm https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local --username salesdemocf --password ${{ARTIFACTORY_PASSWORD}}
+  #     - export CURRENT_CHART_VERSION=`helm search repo poc-demo-1-helm-local/${{CHART_NAME}} | awk 'FNR==2{print $2}'`
+  #     - echo "New ${{CHART_NAME}} Chart Version - ${CURRENT_CHART_VERSION}"
+  #     - cf_export NEW_CHART_VERSION=`echo $CURRENT_CHART_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
+  #   stage: 'Bump Chart Version'
 
-  HelmChartWriteNewVersions:
-    title: Writing Helm Chart Versions...
-    image: mikefarah/yq:4.35.1
-    working_directory: ${{GITCloneSource}}
-    commands:
-      - export PR_MICROSERVICE_CHART_VERSION=${{NEW_MICROSERVICE_CHART_VERSION}}-pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_SHORT_REVISION}}
-      - yq e -i '.version=env(PR_MICROSERVICE_CHART_VERSION)' ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/Chart.yaml
-      - cat ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/Chart.yaml
-      - export IMAGE_TAG=pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
-      - yq e -i '.image.tag=env(IMAGE_TAG)' ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/values.yaml
-      - cat ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/values.yaml
-      - yq e -i '(.dependencies[] | select(has("name")) | select(.name == env(MICROSERVICE))).version=env(PR_MICROSERVICE_CHART_VERSION)' ${{HELM_CHART_PATH}}/Chart.yaml 
-      - export PR_CHART_VERSION=${{NEW_CHART_VERSION}}-pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_SHORT_REVISION}}
-      - yq e -i '.version=env(PR_CHART_VERSION)' ${{HELM_CHART_PATH}}/Chart.yaml
-      - cat ${{HELM_CHART_PATH}}/Chart.yaml
-      - cf_export PR_CHART_VERSION=$PR_CHART_VERSION
-    stage: 'Bump Chart Version'
+  # HelmChartWriteNewVersions:
+  #   title: Writing Helm Chart Versions...
+  #   image: mikefarah/yq:4.35.1
+  #   working_directory: ${{GITCloneSource}}
+  #   commands:
+  #     - export PR_MICROSERVICE_CHART_VERSION=${{NEW_MICROSERVICE_CHART_VERSION}}-pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_SHORT_REVISION}}
+  #     - yq e -i '.version=env(PR_MICROSERVICE_CHART_VERSION)' ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/Chart.yaml
+  #     - cat ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/Chart.yaml
+  #     - export IMAGE_TAG=pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+  #     - yq e -i '.image.tag=env(IMAGE_TAG)' ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/values.yaml
+  #     - cat ${{HELM_CHART_PATH}}/local-charts/${{MICROSERVICE}}/values.yaml
+  #     - yq e -i '(.dependencies[] | select(has("name")) | select(.name == env(MICROSERVICE))).version=env(PR_MICROSERVICE_CHART_VERSION)' ${{HELM_CHART_PATH}}/Chart.yaml 
+  #     - export PR_CHART_VERSION=${{NEW_CHART_VERSION}}-pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_SHORT_REVISION}}
+  #     - yq e -i '.version=env(PR_CHART_VERSION)' ${{HELM_CHART_PATH}}/Chart.yaml
+  #     - cat ${{HELM_CHART_PATH}}/Chart.yaml
+  #     - cf_export PR_CHART_VERSION=$PR_CHART_VERSION
+  #   stage: 'Bump Chart Version'
 
-  HelmChartDependencyUpdate:
-    title: Pulling Helm Chart Dependencies...
-    image: alpine/helm:3.9.4
-    working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
-    commands:
-      - helm dep update 
-    stage: 'Update Chart Dependencies'
+  # HelmChartDependencyUpdate:
+  #   title: Pulling Helm Chart Dependencies...
+  #   image: alpine/helm:3.9.4
+  #   working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
+  #   commands:
+  #     - helm dep update 
+  #   stage: 'Update Chart Dependencies'
 
-  HelmChartLint:
-    title: Linting Helm Chart...
-    image: alpine/helm:3.9.4
-    working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
-    commands:
-      - helm lint .
-    stage: 'Lint Chart'
+  # HelmChartLint:
+  #   title: Linting Helm Chart...
+  #   image: alpine/helm:3.9.4
+  #   working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
+  #   commands:
+  #     - helm lint .
+  #   stage: 'Lint Chart'
 
-  HelmChartPackage:
-    title: Packaging Helm Chart..
-    image: alpine/helm:3.9.4
-    working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
-    commands:
-      - helm package .
-    stage: 'Package Chart'
+  # HelmChartPackage:
+  #   title: Packaging Helm Chart..
+  #   image: alpine/helm:3.9.4
+  #   working_directory: ${{GITCloneSource}}/${{HELM_CHART_PATH}}
+  #   commands:
+  #     - helm package .
+  #   stage: 'Package Chart'
 
-  HelmChartPush:
-    title: Pushing Chart to Artifactory...
-    type: helm
-    arguments:
-      action: push
-      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{HELM_CHART_PATH}}
-      helm_version: 3.9.0
-      helm_repository_context: codedev-artifactory
-      credentials_in_arguments: true
-    stage: 'Push Chart'
+  # HelmChartPush:
+  #   title: Pushing Chart to Artifactory...
+  #   type: helm
+  #   arguments:
+  #     action: push
+  #     chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{HELM_CHART_PATH}}
+  #     helm_version: 3.9.0
+  #     helm_repository_context: codedev-artifactory
+  #     credentials_in_arguments: true
+  #   stage: 'Push Chart'
 
-  GITCloneEnvironments:
-    title: Cloning Environments Repository...
-    type: git-clone
-    repo: '${{CF_REPO_OWNER}}/poc-demo-1-environments'
-    revision: 'main'
-    git: salesdemocf
-    stage: 'Clone Environments Repo'
+  # GITCloneEnvironments:
+  #   title: Cloning Environments Repository...
+  #   type: git-clone
+  #   repo: '${{CF_REPO_OWNER}}/poc-demo-1-environments'
+  #   revision: 'main'
+  #   git: salesdemocf
+  #   stage: 'Clone Environments Repo'
   
-  DeployPR:
-    title: Deploying/Upgrading PR...
-    type: helm
-    arguments:
-      action: install
-      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{HELM_CHART_PATH}}
-      release_name: eva-pr-${{CF_PULL_REQUEST_NUMBER}}
-      helm_version: 3.9.0
-      kube_context: poc-demo-1
-      namespace: cf-demo-app-prs
-      skip_cf_stable_helm_repo: true
-      credentials_in_arguments: true
-      custom_value_files:
-        - /codefresh/volume/poc-demo-1-environments/eva/pullrequests/values.yaml
-      cmd_ps: '--create-namespace'
-    stage: 'Deploy PR'
+  # DeployPR:
+  #   title: Deploying/Upgrading PR...
+  #   type: helm
+  #   arguments:
+  #     action: install
+  #     chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{HELM_CHART_PATH}}
+  #     release_name: eva-pr-${{CF_PULL_REQUEST_NUMBER}}
+  #     helm_version: 3.9.0
+  #     kube_context: poc-demo-1
+  #     namespace: cf-demo-app-prs
+  #     skip_cf_stable_helm_repo: true
+  #     credentials_in_arguments: true
+  #     custom_value_files:
+  #       - /codefresh/volume/poc-demo-1-environments/eva/pullrequests/values.yaml
+  #     cmd_ps: '--create-namespace'
+  #   stage: 'Deploy PR'
 
-  RunDVTSOnPR:
-    title: Testing PR...
-    type: codefresh-run
-    arguments:
-      PIPELINE_ID: "Codefresh Demo Application/codefresh-demo-app-dvts"
-      TRIGGER_ID: dvts
-      BRANCH: main
-      ENABLE_NOTIFICATIONS: true
-      CONTEXT:
-        - salesdemocf
-      VARIABLE:
-        - KUBE_CONTEXT=poc-demo-1
-        - RELEASE_NAME=eva-pr-${{CF_PULL_REQUEST_NUMBER}}
-        - NAMESPACE=cf-demo-app-prs
-        - TEST_IMAGE=${{ARTIFACTORY_REGISTRY}}/tests:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
-        - CF_REVISION=${{CF_REVISION}}
-        - TEST_FILE=test_${{MICROSERVICE}}.py
-    stage: 'Test PR'
+  # RunDVTSOnPR:
+  #   title: Testing PR...
+  #   type: codefresh-run
+  #   arguments:
+  #     PIPELINE_ID: "Codefresh Demo Application/codefresh-demo-app-dvts"
+  #     TRIGGER_ID: dvts
+  #     BRANCH: main
+  #     ENABLE_NOTIFICATIONS: true
+  #     CONTEXT:
+  #       - salesdemocf
+  #     VARIABLE:
+  #       - KUBE_CONTEXT=poc-demo-1
+  #       - RELEASE_NAME=eva-pr-${{CF_PULL_REQUEST_NUMBER}}
+  #       - NAMESPACE=cf-demo-app-prs
+  #       - TEST_IMAGE=${{ARTIFACTORY_REGISTRY}}/tests:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+  #       - CF_REVISION=${{CF_REVISION}}
+  #       - TEST_FILE=test_${{MICROSERVICE}}.py
+  #   stage: 'Test PR'
