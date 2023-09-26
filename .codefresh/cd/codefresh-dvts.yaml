@@ -31,6 +31,16 @@ steps:
       - bash -c 'IFS=" " read -a services <<< "${{TESTING_SERVICES}}" && for service in "${services[@]}"; do external_ip=""; while [ -z $external_ip ]; do echo "Waiting for end point... from kubectl get svc ${{RELEASE_NAME}}-${service} --namespace ${{NAMESPACE}} --template=\"{{range .status.loadBalancer.ingress}}{{.hostname}}{{end}}\""; external_ip=$(kubectl get svc ${{RELEASE_NAME}}-${service} --namespace ${{NAMESPACE}} --template="{{range .status.loadBalancer.ingress}}{{.hostname}}{{end}}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready-" && echo $external_ip; cf_export ${service^^}_ENDPOINT_IP=$external_ip; done'
     stage: 'Get Deployment Details'
 
+  DetermineTestFile:
+    title: Setting Test File Argument
+    image: alpine
+    commands:
+      - cf_export TEST_FILE_ARG='-k ${{TEST_FILE}}
+    when:
+      condition:
+        all:
+          TestFileSet: 'includes("${{TEST_FILE}}", "{{TEST_FILE}}") == false'
+    
   RunIntegrationTests:
     title: Running Integration Tests
     image: ${{TEST_IMAGE}}
@@ -41,7 +51,8 @@ steps:
       - SERVICES=${{TESTING_SERVICES}}"
     entry_point: /bin/sh
     commands:
-      - bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest -vvv --alluredir=${{CF_VOLUME_PATH}}/allure-results; done'
+      - if  cf_export TEST_FILE_ARG='-k
+      - bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest ${{TEST_FILE_ARG}} -vvv --alluredir=${{CF_VOLUME_PATH}}/allure-results; done'
     services:
       composition:
         selenium-event-bus:
