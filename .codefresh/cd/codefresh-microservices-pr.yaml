@@ -140,7 +140,7 @@ steps:
     title: Testing PR...
     type: codefresh-run
     arguments:
-      PIPELINE_ID: "Codefresh Demo App/codefresh-demo-app-dvts"
+      PIPELINE_ID: "Codefresh Demo Application/codefresh-demo-app-dvts"
       TRIGGER_ID: dvts
       BRANCH: main
       ENABLE_NOTIFICATIONS: true
