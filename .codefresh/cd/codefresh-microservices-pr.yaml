@@ -175,4 +175,5 @@ steps:
         - NAMESPACE=cf-demo-app-prs
         - TEST_IMAGE=${{ARTIFACTORY_REGISTRY}}/tests:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
         - CF_REVISION=${{CF_REVISION}}
+        - TEST_FILE=test_${{MICROSERVICE}}.py
     stage: 'Test PR'
