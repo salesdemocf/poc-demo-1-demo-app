@@ -38,7 +38,7 @@ steps:
     when:
       condition:
         all:
-          SourceRepoNotTargetRepo: 'includes("${{CR_REPO_NAME}}", "${{TARGET_REPO}}") == false'
+          SourceRepoNotTargetRepo: 'includes("${{CF_REPO_NAME}}", "${{TARGET_REPO}}") == false'
 
   environment_change_proposal:
     title: Update Target Environment
