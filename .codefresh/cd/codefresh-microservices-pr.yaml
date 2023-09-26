@@ -132,7 +132,7 @@ steps:
       skip_cf_stable_helm_repo: true
       credentials_in_arguments: true
       custom_value_files:
-        - /codefresh/volume/environments/eva/pullrequests/values.yaml
+        - /codefresh/volume/poc-demo-1-environments/eva/pullrequests/values.yaml
     stage: 'Deploy PR'
 
   RunDVTSOnPR:
