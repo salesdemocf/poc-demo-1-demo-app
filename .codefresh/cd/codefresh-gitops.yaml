@@ -6,7 +6,7 @@ stages:
   - promote_candidate
 
 steps:
-  clone_source_repo:
+  clone_target_repo:
     title: Cloning Source Repository
     type: git-clone
     repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
