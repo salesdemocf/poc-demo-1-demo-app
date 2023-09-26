@@ -112,13 +112,13 @@ steps:
     title: Deploying Release Candidate...
     type: codefresh-run
     arguments:
-      PIPELINE_ID: "Example Voting App/cd-promotion"
+      PIPELINE_ID: "Codefresh Demo Application/cd-promotion"
       TRIGGER_ID: eva
       BRANCH: main
       ENABLE_NOTIFICATIONS: true
       DETACH: true
       CONTEXT:
-        - github
+        - salesdemocf
       VARIABLE:
         - RELEASE_CANDIDATE=${{NEW_CHART_VERSION}}
         - RELEASE_CANDIDATE_SERVICE=${{RELEASE_CANDIDATE_SERVICE}}
