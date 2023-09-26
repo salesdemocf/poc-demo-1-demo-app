@@ -36,7 +36,7 @@ steps:
     title: Testing Development...
     type: codefresh-run
     arguments:
-      PIPELINE_ID: "Codefresh Demo Application/dvts"
+      PIPELINE_ID: "Codefresh Demo Application/codefresh-demo-app-dvts"
       TRIGGER_ID: dvts
       BRANCH: main
       SHA: ${{CF_REVISION}}
@@ -71,7 +71,7 @@ steps:
     title: Testing QA...
     type: codefresh-run
     arguments:
-      PIPELINE_ID: "Codefresh Demo Application/dvts"
+      PIPELINE_ID: "Codefresh Demo Application/codefresh-demo-app-dvts"
       TRIGGER_ID: dvts
       BRANCH: main
       SHA: ${{CF_REVISION}}
@@ -111,7 +111,7 @@ steps:
     title: Testing Production...
     type: codefresh-run
     arguments:
-      PIPELINE_ID: "Codefresh Demo Application/dvts"
+      PIPELINE_ID: "Codefresh Demo Application/codefresh-demo-app-dvts"
       TRIGGER_ID: dvts
       BRANCH: main
       SHA: ${{CF_REVISION}}
