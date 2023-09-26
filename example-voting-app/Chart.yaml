@@ -5,7 +5,7 @@ keywords:
   - codefresh
   - kubernetes
   - example-voting-app
-version: "9"
+version: "10"
 sources:
   - https://github.com/aperture-sci/example-voting-app
 maintainers:
@@ -25,7 +25,7 @@ dependencies:
     tags:
       - queue
   - name: result
-    version: "1.0.5"
+    version: "1.0.6"
     repository: file://local-charts/result
     tags:
       - node
