@@ -13,28 +13,13 @@ steps:
     revision: main
     stage: clone
 
-  determine_candidate_source:
-    title: Determining Candidate Source
-    type: freestyle
-    image: quay.io/codefresh/cli
-    shell: bash
-    commands:
-      - |-
-        if [ "$SOURCE_FILE" ] ; then
-            cf_export CANDIDATE_SOURCE=$SOURCE_FILE
-        else
-            cf_export CANDIDATE_IMAGE_TAG=$(echo "$CF_PULL_REQUEST_HEAD_BRANCH-$CF_PULL_REQUEST_HEAD_COMMIT_SHA" | awk '{print tolower($0)}')
-        fi
-    stage: fetch_candidate
-
   fetch_candidate:
-    title: Fetch Release Candidate
-    type: freestyle
-    image: quay.io/codefresh/cli
-    working_directory: ${{clone_target_repo}}
+    title: Identifying Release Candidate Details...
+    image: alpine
     commands:
-      - cf_export CANDIDATE_IMAGE_TAG=$(codefresh get annotation build ${{CF_BUILD_ID}} candidate_image_tag -o json | jq -r '.value')
-    stage: promote_candidate
+      - cf_export RELEASE_CANDIDATE_SERVICE=${{MICROSERVICE}}
+      - cf_export RELEASE_CANDIDATE_IMAGE_TAG=pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+    stage: fetch_candidate
 
   update_target_environment:
     title: Update Target Environment
