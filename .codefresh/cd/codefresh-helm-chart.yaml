@@ -60,7 +60,7 @@ steps:
   HelmChartDependencyUpdate:
     title: Pulling Helm Chart Dependencies...
     image: alpine/helm:3.9.4
-    working_directory: ${{GITClone}}/${{CF_REPO_NAME}}
+    working_directory: ${{GITClone}}/${{HELM_CHART_PATH}}
     commands:
       - helm dep update 
     stage: 'Update Chart Dependencies'
@@ -68,7 +68,7 @@ steps:
   HelmChartLint:
     title: Linting Helm Chart...
     image: alpine/helm:3.9.4
-    working_directory: ${{GITClone}}/${{CF_REPO_NAME}}
+    working_directory: ${{GITClone}}/${{HELM_CHART_PATH}}
     commands:
       - helm lint .
     stage: 'Lint Chart'
@@ -76,7 +76,7 @@ steps:
   HelmChartPackage:
     title: Packaging Helm Chart...
     image: alpine/helm:3.9.4
-    working_directory: ${{GITClone}}/${{CF_REPO_NAME}}
+    working_directory: ${{GITClone}}/${{HELM_CHART_PATH}}
     commands:
       - helm package .
     stage: 'Package Chart'
@@ -86,7 +86,7 @@ steps:
     type: helm
     arguments:
       action: push
-      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{CHART_NAME}}
+      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{HELM_CHART_PATH}}
       helm_version: 3.9.0
       helm_repository_context: codedev-artifactory
       credentials_in_arguments: true
@@ -100,8 +100,8 @@ steps:
       git: salesdemocf
       working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
       commit_message: Committed Promotion Candidate ${{RELEASE_CANDIDATE_IMAGE_TAG}} to ${{HELM_CHART_PATH}}
-      git_user_name: aperture-frresh
-      git_user_email: aperture@codefresh.io
+      git_user_name: salesdemocf
+      git_user_email: salesdemocf@gmail.com
       add:
         - ${{HELM_CHART_PATH}}/Chart.yaml
         - ${{HELM_CHART_PATH}}/local-charts/${{RELEASE_CANDIDATE_SERVICE}}/Chart.yaml
