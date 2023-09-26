@@ -1,7 +1,7 @@
 result:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-    tag: stable
+    tag: ""
 vote:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
