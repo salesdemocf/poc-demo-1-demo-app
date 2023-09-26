@@ -3,7 +3,7 @@ stages:
   - 'Clone Source Code Repo'
   - 'Prepare Testing Environment'
   - 'Get Deployment Details'
-  - 'Preform DVTs'
+  - 'Perform DVTs'
   - 'Finalize Test Reports'
 steps:
 
@@ -35,11 +35,13 @@ steps:
     title: Setting Test File Argument
     image: alpine
     commands:
-      - cf_export TEST_FILE_ARG='-k ${{TEST_FILE}}
+      - cf_export TEST_FILE_ARG="-k ${{TEST_FILE}}"
     when:
       condition:
         all:
           TestFileSet: 'includes("${{TEST_FILE}}", "{{TEST_FILE}}") == false'
+    stage: 'Perform DVTs'
+    
     
   RunIntegrationTests:
     title: Running Integration Tests
@@ -147,7 +149,7 @@ steps:
         #     - SE_EVENT_BUS_HOST=selenium-event-bus
         #     - SE_EVENT_BUS_PUBLISH_PORT=4442
         #     - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-    stage: 'Preform DVTs'
+    stage: 'Perform DVTs'
 
   UploadTestReports:
     title: Uploading Test Reports
