@@ -16,7 +16,7 @@ steps:
     type: git-clone
     repo: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
     revision: main
-    git: github
+    git: salesdemocf
     stage: 'Clone Chart Repo'
 
   IdentifyReleaseCandidate:
@@ -37,7 +37,7 @@ steps:
       - echo "Current ${{RELEASE_CANDIDATE_SERVICE}} Chart Version - ${CURRENT_MICROSERVICE_CHART_VERSION}"
       - cf_export NEW_MICROSERVICE_CHART_VERSION=`echo "${CURRENT_MICROSERVICE_CHART_VERSION}" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
       - curl -L "https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz" -o helm.tar.gz && tar -zxvf helm.tar.gz && mv ./linux-amd64/helm /usr/local/bin/helm 
-      - helm repo add demo-helm https://aperturesci.jfrog.io/artifactory/api/helm/demo-helm --username aperture@codefresh.io --password cmVmdGtuOjAxOjE3MjM1ODQxMzQ6cEVJMFRVYVMxZVZqaFpKenBsVFhNNWxjb1Zu
+      - helm repo add demo-helm https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local --username salesdemocf --password ${{ARTIFACTORY_PASSWORD}}
       - export CURRENT_CHART_VERSION=`helm search repo demo-helm/${{CHART_NAME}} | awk 'FNR==2{print $2}'`
       - echo "New ${{CHART_NAME}} Chart Version - ${CURRENT_CHART_VERSION}"
       - cf_export NEW_CHART_VERSION=`echo $CURRENT_CHART_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | tr -d '"'`
@@ -88,7 +88,7 @@ steps:
       action: push
       chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{CHART_NAME}}
       helm_version: 3.9.0
-      helm_repository_context: aperture-sci-artifactory
+      helm_repository_context: codedev-artifactory
       credentials_in_arguments: true
     stage: 'Push Chart'
 
@@ -97,7 +97,7 @@ steps:
     type: git-commit
     arguments:
       repo: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
-      git: github
+      git: salesdemocf
       working_directory: '/codefresh/volume/${{CF_REPO_NAME}}'
       commit_message: Committed Promotion Candidate ${{RELEASE_CANDIDATE_IMAGE_TAG}} to ${{HELM_CHART_PATH}}
       git_user_name: aperture-frresh
