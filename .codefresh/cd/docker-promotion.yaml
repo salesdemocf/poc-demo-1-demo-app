@@ -1,0 +1,14 @@
+version: "1.0"
+
+stages:
+  - "Tag and Push Candidate"
+
+steps:
+  PromoteImage:
+    type: push
+    arguments:
+      candidate: ${{ARTIFACTORY_REGISTRY}}/${{MICROSERVICE}}:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+      tag: stable
+      image_name: ${{MICROSERVICE}}
+      registry: codedev-artifactory
+    stage: "Tag and Push Candidate"
