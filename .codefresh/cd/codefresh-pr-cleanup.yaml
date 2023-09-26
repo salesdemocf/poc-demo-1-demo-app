@@ -9,6 +9,6 @@ steps:
     title: Deleting Pull Request Environment
     image: codefresh/cfstep-helm:3.9.0
     commands:
-      - kubectl config use-context kubecon-dev
-      - helm delete -n eva-prs eva-pr-${{CF_PULL_REQUEST_NUMBER}}
+      - kubectl config use-context poc-demo-1
+      - helm delete -n cf-demo-app-prs eva-pr-${{CF_PULL_REQUEST_NUMBER}}
     stage: 'Delete PR Environment'
