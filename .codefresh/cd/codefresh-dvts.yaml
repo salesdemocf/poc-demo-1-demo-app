@@ -43,8 +43,8 @@ steps:
     stage: 'Perform DVTs'
     
     
-  RunIntegrationTests:
-    title: Running Integration Tests
+  RunDeploymentVerificationTests:
+    title: Running Deployment Verification Tests
     image: ${{TEST_IMAGE}}
     working_dir: ${{GITClone}}/tests/selenium
     environment:
