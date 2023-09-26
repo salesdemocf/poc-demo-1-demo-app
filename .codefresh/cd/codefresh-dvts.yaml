@@ -53,7 +53,6 @@ steps:
       - SERVICES=${{TESTING_SERVICES}}"
     entry_point: /bin/sh
     commands:
-      - if  cf_export TEST_FILE_ARG='-k
       - bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest ${{TEST_FILE_ARG}} ${{TEST_FILE}} -vvv --alluredir=${{CF_VOLUME_PATH}}/allure-results; done'
     services:
       composition:
