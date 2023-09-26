@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/result
-  tag: stable
+  tag: pr-4-update-result-from-cats-to-squirrels-388e40b
 replicaCount: 1
