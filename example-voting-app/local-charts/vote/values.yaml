@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/vote
-  tag: pr-15-update-fish-to-snakes-01494c2
+  tag: pr-16-update-lizards-to-mice-83b9077
 redis:
   usePassword: false
 replicaCount: 1
