@@ -64,8 +64,8 @@ steps:
       CF_GIT_BRANCH: ${{CF_BRANCH}}
       CF_IMAGE: codedev.jfrog.io/poc-demo-1-docker-local/${{MICROSERVICE}}:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       CF_ISSUE_TRACKING_INTEGRATION: cf-demo-jira
-      CF_JIRA_MESSAGE: SSD-2
-      CF_JIRA_PROJECT_PREFIX: SSD
+      CF_JIRA_MESSAGE: SDD-2
+      CF_JIRA_PROJECT_PREFIX: SDD
     stage: Report Image Details
 
   # HelmChartBumpVersions:
