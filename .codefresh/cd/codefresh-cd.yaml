@@ -1,4 +1,23 @@
 version: '1.0'
+
+hooks:
+  on_elected:
+    exec:
+      image: quay.io/codefresh/cli
+      shell: bash
+      commands:
+        - |-
+          export BUILDS_FOR_PR=$(codefresh get builds --pipeline-name="Codefresh Demo Application/microservices-pr" --commit-id ${{CF_COMMIT_SHA}} -o yaml)
+          echo $BUILDS_FOR_PR    
+          if [ "$BUILDS_FOR_PR" =~ .*"pending".* ] ; then
+              echo "PR Dependency Builds Not Completed.  Terminating this build.  New build will be created by in progress dependency build."
+              codefresh terminate ${{CF_BUILD_ID}}
+          fi
+          if [ "$BUILDS_FOR_PR" =~ .*"running".* ] ; then
+              echo "PR Dependency Builds Not Completed.  Terminating this build.  New build will be created by in progress dependency build."
+              codefresh terminate ${{CF_BUILD_ID}} 
+          fi
+
 stages:
   - "Clone Environments Repo"
   - "Deploy To Development"
