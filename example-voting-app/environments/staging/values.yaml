@@ -5,7 +5,7 @@ result:
 vote:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
-    tag: "pr-11-update-hamsters-to-birds-4b53f55"
+    tag: "pr-14-update-cats-to-lizards-43ae64f"
 worker:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/worker
