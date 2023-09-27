@@ -13,7 +13,7 @@ spec:
       helm:
         valueFiles:
           - $environments/eva/gitops/development/values.yaml
-    - repoURL: https://github.com/salesdemocf/environments.git
+    - repoURL: https://github.com/salesdemocf/poc-demo-1-environments.git
       targetRevision: HEAD
       ref: environments
   destination:
