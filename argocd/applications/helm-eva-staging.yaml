@@ -6,7 +6,7 @@ metadata:
     codefresh.io/product: example-voting-app
 spec:
   project: default
-  source:
+  sources:
     - repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
       targetRevision: HEAD
       path: example-voting-app
