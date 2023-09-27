@@ -7,12 +7,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
-    targetRevision: HEAD
-    path: example-voting-app
-    helm:
-      valueFiles:
-        - environments/staging/values.yaml
+    - repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
+      targetRevision: HEAD
+      path: example-voting-app
+      helm:
+        valueFiles:
+          - $environments/eva/gitops/staging/values.yaml
+    - repoURL: https://github.com/salesdemocf/environments.git
+      targetRevision: HEAD
+      ref: environments
   destination:
     namespace: staging
     server: https://kubernetes.default.svc
