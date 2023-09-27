@@ -1,11 +1,17 @@
 version: '1.0'
 
 stages:
+  - approve
   - clone
   - fetch_candidate
   - promote_candidate
 
 steps:
+  start_gitops_deployment:
+    title: Would you like to start a GitOps Deployment?
+    type: pending-approval
+    stage: approve
+
   clone_target_repo:
     title: Cloning Source Repository
     type: git-clone
