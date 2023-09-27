@@ -12,10 +12,10 @@ steps:
     type: pending-approval
     stage: approve
 
-  clone_target_repo:
+  clone_source_repo:
     title: Cloning Source Repository
     type: git-clone
-    repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
+    repo: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
     revision: main
     stage: clone
 
@@ -26,6 +26,13 @@ steps:
       - cf_export RELEASE_CANDIDATE_SERVICE=${{MICROSERVICE}}
       - cf_export RELEASE_CANDIDATE_IMAGE_TAG=pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
     stage: fetch_candidate
+
+  clone_target_repo:
+    title: Cloning Source Repository
+    type: git-clone
+    repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
+    revision: main
+    stage: clone
 
   update_target_environment:
     title: Update Target Environment
