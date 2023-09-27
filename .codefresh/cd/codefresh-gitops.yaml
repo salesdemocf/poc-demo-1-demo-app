@@ -29,7 +29,7 @@ steps:
     commands:
       - echo "Before Changes"
       - cat ${{TARGET_FILE}}
-      - yq -i '${{TARGET_FILE_IMAGE_TAG_PLACEMENT}} = "${{CANDIDATE_IMAGE_TAG}}"' ${{TARGET_FILE}}
+      - yq -i '${{TARGET_FILE_IMAGE_TAG_PLACEMENT}} = "${{RELEASE_CANDIDATE_IMAGE_TAG}}"' ${{TARGET_FILE}}
       - echo "After Changes"
       - cat ${{TARGET_FILE}}
     stage: promote_candidate
@@ -41,7 +41,7 @@ steps:
       repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
       git: salesdemocf
       working_directory: '/codefresh/volume/${{TARGET_REPO}}'
-      commit_message: Committed Promotion Candidate ${{CANDIDATE_IMAGE_TAG}} to ${{TARGET_FILE}}
+      commit_message: Committed ${{MICROSERVICE}} Promotion Candidate ${{RELEASE_CANDIDATE_IMAGE_TAG}} to ${{TARGET_FILE}}
       git_user_name: salesdemocf
       git_user_email: salesdemocf@gmail.com
       rebase: true
