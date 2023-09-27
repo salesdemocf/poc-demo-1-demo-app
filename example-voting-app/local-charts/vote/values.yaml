@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/vote
-  tag: pr-7-update-mice-to-birds-c8a144f
+  tag: pr-9-change-birds-to-hamsters-abb8ff2
 redis:
   usePassword: false
 replicaCount: 1
