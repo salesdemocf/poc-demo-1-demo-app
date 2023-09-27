@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/result
-  tag: pr-9-change-birds-to-hamsters-abb8ff2
+  tag: pr-10-update-dogs-to-cats-82b3053
 replicaCount: 1
