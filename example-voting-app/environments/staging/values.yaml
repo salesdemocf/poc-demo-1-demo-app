@@ -1,12 +1,12 @@
 result:
   image:
-    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/result
-    tag: stable
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/result
+    tag: "pr-11-update-hamsters-to-birds-4b53f55"
 vote:
   image:
-    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/vote
-    tag: stable
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
+    tag: "pr-11-update-hamsters-to-birds-4b53f55"
 worker:
   image:
-    repository: 336151728602.dkr.ecr.us-east-1.amazonaws.com/poc-demo-1/worker
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/worker
     tag: stable
