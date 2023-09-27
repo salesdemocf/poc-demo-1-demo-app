@@ -50,21 +50,20 @@ steps:
       - cf_export GITHUB_TOKEN=$(codefresh get context ${{CF_REPO_OWNER}} --decrypt -o yaml | yq -y .spec.data.auth.password)
     stage: Report Image Details
 
-  # ReportImageMetadataAll:
-  #   title: Reporting Image to Codefresh...
-  #   type: codefresh-report-image
-  #   working_directory: /code
-  #   arguments:
-  #     CF_API_KEY: ${{CF_API_KEY}}
-  #     CF_CONTAINER_REGISTRY_INTEGRATION: ${{CF_REPO_OWNER}}
-  #     CF_RUNTIME_NAME: ${{GITOPS_RUNTIME_NAME}}
-  #     CF_CONTAINER_REGISTRY_INTEGRATION: artifactory
-  #     CF_GITHUB_TOKEN: ${{GITHUB_TOKEN}}
-  #     CF_GIT_PROVIDER: github
-  #     CF_GIT_REPO: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
-  #     CF_GIT_BRANCH: ${{CF_BRANCH}}
-  #     CF_IMAGE: codedev.jfrog.io/poc-demo-1-docker-local/${{MICROSERVICE}}:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
-  #   stage: Report Image Details
+  ReportImageMetadataAll:
+    title: Reporting Image to Codefresh...
+    type: codefresh-report-image
+    working_directory: /code
+    arguments:
+      CF_API_KEY: ${{CF_API_KEY}}
+      CF_RUNTIME_NAME: ${{GITOPS_RUNTIME_NAME}}
+      CF_CONTAINER_REGISTRY_INTEGRATION: artifactory
+      CF_GITHUB_TOKEN: ${{GITHUB_TOKEN}}
+      CF_GIT_PROVIDER: github
+      CF_GIT_REPO: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
+      CF_GIT_BRANCH: ${{CF_BRANCH}}
+      CF_IMAGE: codedev.jfrog.io/poc-demo-1-docker-local/${{MICROSERVICE}}:pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+    stage: Report Image Details
 
   # HelmChartBumpVersions:
   #   title: Bumping Helm Chart Versions...
