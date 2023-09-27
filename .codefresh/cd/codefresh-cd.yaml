@@ -7,7 +7,7 @@ hooks:
       shell: bash
       commands:
         - |-
-          export BUILDS_FOR_PR=$(codefresh get builds --pipeline-name="Codefresh Demo Application/helm-promotion" --commit-id ${{CF_REVISION}} -o yaml)
+          export BUILDS_FOR_PR=$(codefresh get builds --pipeline-name="Codefresh Demo Application/helm-promotion" --commit-id $(codefresh get builds ${{PARENT_BUILD_ID}} --output yaml | yq .commit-Id) -o yaml)
           echo $BUILDS_FOR_PR    
           if [[ "$BUILDS_FOR_PR" =~ .*"pending".* ]] ; then
               echo "PR Dependency Builds Not Completed.  Terminating this build.  New build will be created by in progress dependency build."
