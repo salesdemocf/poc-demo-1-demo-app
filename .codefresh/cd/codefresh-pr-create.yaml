@@ -1,0 +1,83 @@
+# More examples of Codefresh YAML can be found at
+# https://codefresh.io/docs/docs/yaml-examples/examples/
+
+version: '1.0'
+
+stages:
+  - 'GIT Clone'
+  - 'Check For Images'
+  - 'Deploy PR Environment'
+
+steps:
+  CloneDemoApplicationRepo:
+    title: Cloning source code repository...
+    type: git-clone
+    repo: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
+    revision: ${{CF_REVISION}}
+    git: salesdemocf
+    stage: 'GIT Clone'
+    
+  CloneEnvironmentsRepo:
+    title: Cloning environments repository...
+    type: git-clone
+    repo: ${{CF_REPO_OWNER}}/${{ENVIRONMENTS_REPO_NAME}}
+    revision: main
+    git: salesdemocf
+    stage: 'GIT Clone'
+
+  ConfirmServiceChanges:
+    title: Determining services modified by pr...
+    type: freestyle
+    image: codefresh/cli
+    working_directory: ${{CloneDemoApplicationRepo}}
+    commands:
+      # Determine Changed Services
+      - export CHANGED_MICROSERVICES=""
+      - |-
+        bash -c 'IFS=" " read -a microservices <<< "${{AVAILABLE_MICROSERVICES}}" && for microservice in "${microservices[@]}"; do present_in_pr=""; echo "Checking for PR for modification to ${microservice}"; present_in_pr=$(git diff --name-only "origin/${{CF_BRANCH}}" $(git merge-base origin/${{CF_BRANCH}} origin/${{CF_PULL_REQUEST_TARGET}}) | grep ${microservice}/); if [ -z $present_in_pr ]; then echo "No changes found for ${microservice} in pr."; else echo "Changes found for ${microservice} in pr."  && export CHANGED_MICROSERVICES+="${microservice} "; fi; done && cf_export MICROSERVICES="$CHANGED_MICROSERVICES"'
+    stage: 'Check For Images'
+
+  CheckImagesExist:
+    title: Check for required images..
+    type: freestyle
+    image: codefresh/cli
+    commands:
+      # Loop Query JFrog for Service Images
+      - |-
+        bash -c 'IFS=" " read -a microservices <<< "${{MICROSERVICES}}" && for microservice in "${microservices[@]}"; do image_available=""; while [[ -z $image_available ]]; do echo "Waiting for image ${{ARTIFACTORY_REGISTRY}}/${microservice}/pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}} to be available in Artifactory "; image_available=$(curl --location "https://${{ARTIFACTORY_DOMAIN}}/artifactory/api/docker/${{ARTIFACTORY_REPOSITORY}}/v2/${microservice}/tags/list?" --header "Authorization: Bearer ${{ARTIFACTORY_API_TOKEN}}" | grep pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}); [[ -z "$image_available" ]] && sleep 10; done; echo "Image for ${microservice} is available..."; cf_export ${microservice}_image_tag=pr-${{CF_PULL_REQUEST_NUMBER}}-${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}; done'
+    stage: 'Check For Images'
+    
+  UpdateEphemeralValuesFile:
+    title: Updating pr valuesfile...
+    type: freestyle
+    image:  codefresh/cli
+    shell: bash
+    working_directory: ${{CloneEnvironmentsRepo}}
+    commands:
+      - |-
+        rm -rf /usr/local/bin/yq
+        apk add yq
+        echo "Before Changes"
+        cat /codefresh/volume/${{ENVIRONMENTS_REPO_NAME}}/${{CHART_NAME_ABBR}}/pullrequests/values.yaml
+        echo "Processing Services: ${{MICROSERVICES}}"
+        IFS=" " read -a microservices <<< "${{MICROSERVICES}}" && for microservice in "${microservices[@]}"; do tag_name="${microservice}_image_tag"; export service_image_tag_map+="${microservice}:${tag_name} "; echo "Process Service:${microservice} Tag Name:${tag_name}"; done
+        IFS=" " read -a map_items <<< "${service_image_tag_map}" && for map_item in "${map_items[@]}"; do arrIN=(${map_item//:/ }); service_value=${arrIN[0]}; tag_value=$(echo ${!arrIN[1]}); echo "Process Service:${service_value} Tag Value:${tag_value}";  yq -i '.'${service_value}'.image.tag = "'${tag_value}'"' /codefresh/volume/${{ENVIRONMENTS_REPO_NAME}}/${{CHART_NAME_ABBR}}/pullrequests/values.yaml; done
+        echo "After Changes"
+        cat /codefresh/volume/${{ENVIRONMENTS_REPO_NAME}}/${{CHART_NAME_ABBR}}/pullrequests/values.yaml
+    stage: 'Deploy PR Environment'
+
+  DeployPREnvironment:
+    title: Deploying/Upgrading PR...
+    type: helm
+    arguments:
+      action: install
+      chart_name: /codefresh/volume/${{CF_REPO_NAME}}/${{CHART_NAME}}
+      release_name: ${{CHART_NAME_ABBR}}-pr-${{CF_PULL_REQUEST_NUMBER}}
+      helm_version: 3.9.0
+      kube_context: ${{KUBE_CONTEXT}}
+      namespace: cf-demo-app-prs
+      skip_cf_stable_helm_repo: true
+      credentials_in_arguments: true
+      custom_value_files:
+        - /codefresh/volume/${{ENVIRONMENTS_REPO_NAME}}/${{CHART_NAME_ABBR}}/pullrequests/values.yaml
+    stage: 'Deploy PR Environment'
