@@ -6,7 +6,7 @@ stages:
 
 steps:
 
- CheckForPREnvironment:
+  CheckForPREnvironment:
     title: Deleting Pull Request Environment
     image: codefresh/cfstep-helm:3.9.0
     commands:
