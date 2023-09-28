@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/result
-  tag: pr-18-change-mice-to-dogs-ce4e1af
+  tag: pr-21-update-result-dogs-to-cats-38ae3c6
 replicaCount: 1
