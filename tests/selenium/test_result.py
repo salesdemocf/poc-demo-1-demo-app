@@ -31,7 +31,7 @@ def browser():
 
 def test_confirm_result_title(browser):
     browser.get("http://{}".format(result_endpoint))
-    assert "Dogs vs Cats -- Result" in browser.title
+    assert "Dogs vs Birds -- Result" in browser.title
 
 
 def test_confirm_result(browser):
