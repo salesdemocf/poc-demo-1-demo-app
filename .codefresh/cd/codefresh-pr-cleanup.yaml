@@ -1,14 +1,27 @@
 version: '1.0'
 
 stages:
+- 'Check for PR Environment'
 - 'Delete PR Environment'
 
 steps:
 
-  DeletePullRequestEnvironment:
+ CheckForPREnvironment:
     title: Deleting Pull Request Environment
     image: codefresh/cfstep-helm:3.9.0
     commands:
       - kubectl config use-context poc-demo-1
-      - helm delete -n cf-demo-app-prs eva-pr-${{CF_PULL_REQUEST_NUMBER}}
+      - bash -c 'cf_export PR_ENVIRONMENT=$(helm list -n cf-demo-app-dev --no-headers -q | grep eva-pr-${{CF_PULL_REQUEST_NUMBER}}) || true'
     stage: 'Delete PR Environment'
+
+  DeletePREnvironment:
+    title: Deleting Pull Request Environment
+    image: codefresh/cfstep-helm:3.9.0
+    commands:
+      - kubectl config use-context poc-demo-1
+      - helm delete -n cf-demo-app-prs ${{PR_ENVIRONMENT}}
+    stage: 'Delete PR Environment'
+    when:
+      condition:
+        all:
+          PREnvironmentFound: 'includes("${{PR_ENVIRONMENT}}", "") == false'
