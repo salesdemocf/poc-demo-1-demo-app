@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/vote
-  tag: pr-23-update-dogs-to-fish-a17448c
+  tag: pr-28-update-vote-fcc6dda
 redis:
   usePassword: false
 replicaCount: 1
