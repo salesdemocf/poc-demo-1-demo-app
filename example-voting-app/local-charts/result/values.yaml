@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/result
-  tag: pr-22-update-birds-to-dogs-b03c7fc
+  tag: pr-23-update-dogs-to-fish-a17448c
 replicaCount: 1
