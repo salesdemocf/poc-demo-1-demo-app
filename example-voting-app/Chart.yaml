@@ -25,12 +25,12 @@ dependencies:
     tags:
       - queue
   - name: result
-    version: "1.0.19"
+    version: "1.0.20"
     repository: file://local-charts/result
     tags:
       - node
   - name: vote
-    version: "1.0.26"
+    version: "1.0.27"
     repository: file://local-charts/vote
     tags:
       - python
