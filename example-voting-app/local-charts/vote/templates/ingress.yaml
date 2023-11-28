@@ -17,5 +17,6 @@ spec:
       - path: /*
         pathType: ImplementationSpecific
         backend:
-          serviceName: {{ template "fullname" . }}
-          servicePort: use-annotation
+          service:
+            name: {{ template "fullname" . }}
+            port: use-annotation
