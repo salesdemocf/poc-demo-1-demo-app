@@ -15,6 +15,7 @@ spec:
   - http:
       paths:
       - path: /*
+        pathType: ImplementationSpecific
         backend:
           # servicePort must be the value: use-annotation
           # This instructs AWS Load Balancer Controller to look to annotations on how to direct traffic
