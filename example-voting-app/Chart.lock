@@ -7,12 +7,12 @@ dependencies:
   version: 17.15.2
 - name: result
   repository: file://local-charts/result
-  version: 1.0.23
+  version: 1.0.24
 - name: vote
   repository: file://local-charts/vote
-  version: 1.0.31
+  version: 1.0.32
 - name: worker
   repository: file://local-charts/worker
   version: 1.0.3
-digest: sha256:8319585fde59f5752b8939119533aa31b72213c7f685ff9f8ad31a000ad72e1d
-generated: "2023-11-28T13:13:22.258137-08:00"
+digest: sha256:53009a0c0f3fb49725f6b9ad425ba23cde180866a19532e8b61cfd9a00dfc0f8
+generated: "2023-11-28T13:17:47.837002-08:00"
