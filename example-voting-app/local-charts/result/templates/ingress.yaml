@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "fullname" . }}
+  annotations:
+    kubernetes.io/ingress.class: alb
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    release: {{ .Release.Name  | quote }}
+    heritage: {{ .Release.Service  | quote }}
+    version: {{ .Values.image.tag | quote }}
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          # servicePort must be the value: use-annotation
+          # This instructs AWS Load Balancer Controller to look to annotations on how to direct traffic
+          servicePort: use-annotation
