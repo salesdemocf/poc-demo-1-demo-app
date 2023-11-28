@@ -38,3 +38,37 @@ spec:
       autoPromotionEnabled: false
       activeService: {{ template "fullname" . }}
       previewService: {{ template "fullname" . }}-preview
+      metrics:
+        - name: curl-{{ template "fullname" . }}
+          provider:
+            job:
+              metadata:
+                labels:
+                  app: {{ template "fullname" . }}
+                  chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+                  release: {{ .Release.Name  | quote }}
+                  heritage: {{ .Release.Service  | quote }}
+                  version: {{ .Values.image.tag | quote }}
+              spec:
+                backoffLimit: 1
+                template:
+                  spec:
+                    containers:
+                    - name: curl-{{ template "fullname" . }}
+                      image: curlimages/curl:latest
+                      command:
+                        - /bin/sh
+                        - -c
+                        - |
+                          curl -I https://www.baidu.com
+                          status_code=$(curl --write-out "%{http_code}\n" --silent --output /dev/null "http://{{ template "fullname" . }}-preview.{{ .Release.Namespace  | quote }}.svc.cluster.local");
+                          [ $status_code -eq 200 ]
+                    restartPolicy: Never
+      trafficRouting:
+        alb:
+          # The referenced ingress will be injected with a custom action annotation, directing
+          # the AWS Load Balancer Controller to split traffic between the canary and stable
+          # Service, according to the desired traffic weight (required).
+          ingress: {{ template "fullname" . }}
+          # Service port is the port which the Service listens on (required).
+          servicePort: 80
