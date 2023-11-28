@@ -19,4 +19,5 @@ spec:
         backend:
           service:
             name: {{ template "fullname" . }}
-            port: use-annotation
+            port: 
+              name: http
