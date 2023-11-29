@@ -25,7 +25,7 @@ spec:
                     - /bin/sh
                     - -c
                     - |
-                      curl -I http://{{ template "fullname" . }}-preview.{{ .Release.Namespace  | quote }}.svc.cluster.local"
+                      curl -I http://{{ template "fullname" . }}-preview.{{ .Release.Namespace  | quote }}.svc.cluster.local
                       status_code=$(curl --write-out "%{http_code}\n" --silent --output /dev/null "http://{{ template "fullname" . }}-preview.{{ .Release.Namespace  | quote }}.svc.cluster.local");
                       [ $status_code -eq 200 ]
                 restartPolicy: Never
