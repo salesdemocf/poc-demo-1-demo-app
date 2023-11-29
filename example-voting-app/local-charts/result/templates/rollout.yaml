@@ -76,9 +76,5 @@ spec:
       - pause: {duration: 10}
       trafficRouting:
         alb:
-          # The referenced ingress will be injected with a custom action annotation, directing
-          # the AWS Load Balancer Controller to split traffic between the canary and stable
-          # Service, according to the desired traffic weight (required).
-          ingress: {{ template "fullname" . }}
-          # Service port is the port which the Service listens on (required).
           servicePort: 80
+          stableIngress: {{ template "fullname" . }}
