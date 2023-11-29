@@ -108,20 +108,20 @@ steps:
         - ${{HELM_CHART_PATH}}/local-charts/${{RELEASE_CANDIDATE_SERVICE}}/values.yaml
     stage: 'Promote Release Candidate'
 
-  DeployReleaseCandidate:
-    title: Deploying Release Candidate...
-    type: codefresh-run
-    arguments:
-      PIPELINE_ID: "Codefresh Demo Application/cd-promotion"
-      TRIGGER_ID: eva
-      BRANCH: main
-      ENABLE_NOTIFICATIONS: true
-      DETACH: true
-      CONTEXT:
-        - salesdemocf
-      VARIABLE:
-        - PARENT_BUILD_ID=${{CF_BUILD_ID}}
-        - RELEASE_CANDIDATE=${{NEW_CHART_VERSION}}
-        - RELEASE_CANDIDATE_SERVICE=${{RELEASE_CANDIDATE_SERVICE}}
-        - RELEASE_CANDIDATE_IMAGE_TAG=${{RELEASE_CANDIDATE_IMAGE_TAG}}
-    stage: 'Deploy Release Candidate'
+  # DeployReleaseCandidate:
+  #   title: Deploying Release Candidate...
+  #   type: codefresh-run
+  #   arguments:
+  #     PIPELINE_ID: "Codefresh Demo Application/cd-promotion"
+  #     TRIGGER_ID: eva
+  #     BRANCH: main
+  #     ENABLE_NOTIFICATIONS: true
+  #     DETACH: true
+  #     CONTEXT:
+  #       - salesdemocf
+  #     VARIABLE:
+  #       - PARENT_BUILD_ID=${{CF_BUILD_ID}}
+  #       - RELEASE_CANDIDATE=${{NEW_CHART_VERSION}}
+  #       - RELEASE_CANDIDATE_SERVICE=${{RELEASE_CANDIDATE_SERVICE}}
+  #       - RELEASE_CANDIDATE_IMAGE_TAG=${{RELEASE_CANDIDATE_IMAGE_TAG}}
+  #   stage: 'Deploy Release Candidate'
