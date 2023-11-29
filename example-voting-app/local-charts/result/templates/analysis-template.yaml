@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
- name: curl-{{ template "fullname" . }}
+ name: curl-{{ .Chart.Name }}
 spec:
   metrics:
-    - name: curl-{{ template "fullname" . }}
+    - name: curl-{{ .Chart.Name }}
       provider:
         job:
           metadata:
@@ -19,7 +19,7 @@ spec:
             template:
               spec:
                 containers:
-                - name: curl-{{ template "fullname" . }}
+                - name: curl-{{ .Chart.Name }}
                   image: curlimages/curl:latest
                   command:
                     - /bin/sh
