@@ -40,32 +40,9 @@ spec:
     canary:
       canaryService: {{ template "fullname" . }}-preview
       stableService:  {{ template "fullname" . }}
-      metrics:
-        - name: curl-{{ template "fullname" . }}
-          provider:
-            job:
-              metadata:
-                labels:
-                  app: {{ template "fullname" . }}
-                  chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-                  release: {{ .Release.Name  | quote }}
-                  heritage: {{ .Release.Service  | quote }}
-                  version: {{ .Values.image.tag | quote }}
-              spec:
-                backoffLimit: 1
-                template:
-                  spec:
-                    containers:
-                    - name: curl-{{ template "fullname" . }}
-                      image: curlimages/curl:latest
-                      command:
-                        - /bin/sh
-                        - -c
-                        - |
-                          curl -I https://www.baidu.com
-                          status_code=$(curl --write-out "%{http_code}\n" --silent --output /dev/null "http://{{ template "fullname" . }}-preview.{{ .Release.Namespace  | quote }}.svc.cluster.local");
-                          [ $status_code -eq 200 ]
-                    restartPolicy: Never
+      analysis:
+        templates:
+        - templateName: curl-{{ template "fullname" . }}
       steps:
       - setWeight: 20
       - pause: {}
