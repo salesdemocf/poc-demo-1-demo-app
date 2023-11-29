@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/result
-  tag: pr-51-result-cats-vs-rats-821da34
+  tag: pr-54-result-change-rats-to-pickles-2bbdab6
 replicaCount: 1
