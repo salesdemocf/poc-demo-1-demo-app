@@ -28,7 +28,7 @@ steps:
     image: codefresh/cfstep-helm
     commands:
       - kubectl config use-context ${{KUBE_CONTEXT}}
-      - bash -c 'IFS=" " read -a services <<< "${{TESTING_SERVICES}}" && for service in "${services[@]}"; do external_ip=""; while [ -z $external_ip ]; do echo "Waiting for end point... from kubectl get svc ${{RELEASE_NAME}}-${service} --namespace ${{NAMESPACE}} --template=\"{{range .status.loadBalancer.ingress}}{{.hostname}}{{end}}\""; external_ip=$(kubectl get svc ${{RELEASE_NAME}}-${service} --namespace ${{NAMESPACE}} --template="{{range .status.loadBalancer.ingress}}{{.hostname}}{{end}}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready-" && echo $external_ip; cf_export ${service^^}_ENDPOINT_IP=$external_ip; done'
+      - bash -c 'IFS=" " read -a services <<< "${{TESTING_SERVICES}}" && for service in "${services[@]}"; do external_ip=""; while [ -z $external_ip ]; do echo "Waiting for end point... from kubectl get ingress ${{RELEASE_NAME}}-${service} --namespace ${{NAMESPACE}} --template=\"{{range .status.loadBalancer.ingress}}{{.hostname}}{{end}}\""; external_ip=$(kubectl get ingress ${{RELEASE_NAME}}-${service} --namespace ${{NAMESPACE}} --template="{{range .status.loadBalancer.ingress}}{{.hostname}}{{end}}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready-" && echo $external_ip; cf_export ${service^^}_ENDPOINT_IP=$external_ip; done'
     stage: 'Get Deployment Details'
 
   DetermineTestFile:
