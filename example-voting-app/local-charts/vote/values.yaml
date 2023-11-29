@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/vote
-  tag: stable
+  tag: pr-58-vote-dogs-to-pickles-eee5a9c
 redis:
   usePassword: false
 replicaCount: 1
