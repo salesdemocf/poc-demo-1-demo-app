@@ -42,7 +42,7 @@ spec:
       stableService:  {{ template "fullname" . }}
       analysis:
         templates:
-        - templateName: curl-{{ template "fullname" . }}
+        - templateName: curl-{{ .Chart.Name }}
       steps:
       - setWeight: 20
       - pause: {}

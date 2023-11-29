@@ -40,7 +40,7 @@ spec:
       previewService: {{ template "fullname" . }}-preview
       analysis:
         templates:
-        - templateName: curl-{{ template "fullname" . }}
+        - templateName: curl-{{ .Chart.Name }}
       trafficRouting:
         alb:
           ingress: {{ template "fullname" . }}
