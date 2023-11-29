@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: {{ template "fullname" . }}
   annotations:
-    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
   labels:
     app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
@@ -11,6 +11,7 @@ metadata:
     heritage: {{ .Release.Service  | quote }}
     version: {{ .Values.image.tag | quote }}
 spec:
+  ingressClassName: alb
   rules:
   - http:
       paths:
