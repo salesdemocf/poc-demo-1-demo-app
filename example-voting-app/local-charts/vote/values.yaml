@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/vote
-  tag: pr-50-vote-cats-vs-rats-a941e01
+  tag: pr-53-vote-change-rats-to-pickles-c124c68
 redis:
   usePassword: false
 replicaCount: 1
