@@ -41,7 +41,3 @@ spec:
       prePromotionAnalysis:
         templates:
         - templateName: curl-{{ .Chart.Name }}
-      trafficRouting:
-        alb:
-          ingress: {{ template "fullname" . }}
-          servicePort: 80
