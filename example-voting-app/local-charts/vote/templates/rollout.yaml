@@ -38,7 +38,7 @@ spec:
       autoPromotionEnabled: false
       activeService: {{ template "fullname" . }}
       previewService: {{ template "fullname" . }}-preview
-      analysis:
+      prePromotionAnalysis:
         templates:
         - templateName: curl-{{ .Chart.Name }}
       trafficRouting:
