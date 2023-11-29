@@ -39,6 +39,7 @@ spec:
   strategy:
     canary:
       canaryService: {{ template "fullname" . }}-preview
+      stableService:  {{ template "fullname" . }}
       metrics:
         - name: curl-{{ template "fullname" . }}
           provider:
@@ -76,5 +77,5 @@ spec:
       - pause: {duration: 10}
       trafficRouting:
         alb:
+          ingress: {{ template "fullname" . }}
           servicePort: 80
-          stableIngress: {{ template "fullname" . }}
