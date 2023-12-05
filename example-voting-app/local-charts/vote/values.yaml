@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: quay.io/codefresh-contrib/vote
-  tag: pr-61-random-vote-change-3-93b3675
+  tag: pr-62-random-vote-change-4-7e99337
 redis:
   usePassword: false
 replicaCount: 1
