@@ -1,0 +1,12 @@
+result:
+  image:
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/result
+    tag: "pr-29-update-result-d36101f"
+vote:
+  image:
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
+    tag: "pr-50-vote-cats-vs-rats-a941e01"
+worker:
+  image:
+    repository: codedev.jfrog.io/poc-demo-1-docker-local/worker
+    tag: stable
