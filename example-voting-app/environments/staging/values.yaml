@@ -1,7 +1,7 @@
 result:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-    tag: pr-54-result-change-rats-to-pickles-2bbdab6
+    tag: pr-70-random-vote-change-12-cdd33a3
 vote:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
