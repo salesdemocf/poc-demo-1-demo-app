@@ -1,4 +1,4 @@
-FROM node:18-slim
+FROM quay.io/codefresh-contrib/node:18-slim
 
 # add curl for healthcheck
 RUN apt-get update \

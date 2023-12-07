@@ -1,4 +1,4 @@
-FROM python:3.11.4-alpine
+FROM quay.io/codefresh-contrib/python:3.11.4-alpine
 
 RUN apk update && \
     apk add bash && \
