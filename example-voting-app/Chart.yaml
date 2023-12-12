@@ -30,7 +30,7 @@ dependencies:
     tags:
       - node
   - name: vote
-    version: "1.0.63"
+    version: "1.0.64"
     repository: file://local-charts/vote
     tags:
       - python

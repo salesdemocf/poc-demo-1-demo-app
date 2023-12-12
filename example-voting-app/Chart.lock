@@ -10,9 +10,9 @@ dependencies:
   version: 1.0.39
 - name: vote
   repository: file://local-charts/vote
-  version: 1.0.54
+  version: 1.0.64
 - name: worker
   repository: file://local-charts/worker
   version: 1.0.3
-digest: sha256:7d202b76a985639b900ca34cfb0ae18329d4037769706d82fc79d2a23eb58f1f
-generated: "2023-11-29T13:53:42.966168-08:00"
+digest: sha256:f76b556be326fda44f3c62e0f379e3b150b78baceba42a57022b9e7bc32a89ea
+generated: "2023-12-12T13:33:48.942246-08:00"
