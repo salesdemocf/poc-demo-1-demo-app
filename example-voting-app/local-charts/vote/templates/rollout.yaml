@@ -35,7 +35,7 @@ spec:
           value: {{ .Values.redis.host | default (printf "%s-redis-master" ( .Release.Name )) | quote }}
   strategy:
     blueGreen:
-      autoPromotionEnabled: true
+      autoPromotionEnabled: false
       activeService: {{ template "fullname" . }}
       previewService: {{ template "fullname" . }}-preview
       prePromotionAnalysis:
