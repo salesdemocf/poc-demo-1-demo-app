@@ -1,7 +1,7 @@
 result:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-    tag: pr-85-random-vote-change-27-ae12ce4
+    tag: pr-87-random-vote-change-29-f8f0076
 vote:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
