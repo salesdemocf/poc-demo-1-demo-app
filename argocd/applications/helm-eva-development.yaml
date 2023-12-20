@@ -9,7 +9,7 @@ spec:
   source:
     chart: example-voting-app
     repoURL: https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local
-    targetRevision: 1.0.72
+    targetRevision: 1.0.73
     # repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
     # targetRevision: HEAD
     # path: example-voting-app
