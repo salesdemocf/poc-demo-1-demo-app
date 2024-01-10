@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-  tag: pr-95-random-vote-change-36-c04f250
+  tag: pr-98-random-vote-change-39-b30a651
 replicaCount: 1
