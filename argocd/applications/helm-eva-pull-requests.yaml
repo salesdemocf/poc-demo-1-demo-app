@@ -17,7 +17,7 @@ spec:
         # Labels is used to filter the PRs that you want to target. (optional)
         labels:
         - preview
-      requeueAfterSeconds: 600
+      requeueAfterSeconds: 180
   template:
     metadata:
       name: eva-pr-{{number}}
