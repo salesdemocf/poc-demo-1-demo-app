@@ -15,7 +15,7 @@ spec:
         # Reference to a Secret containing an access token. (optional)
         tokenRef:
           secretName: poc-demo-1-git-password
-          key: password
+          key: data.password
         # Labels is used to filter the PRs that you want to target. (optional)
         labels:
         - preview
