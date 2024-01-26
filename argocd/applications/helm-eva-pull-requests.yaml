@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: eva-prs
+  annotations:
+    codefresh.io/product: example-voting-app
+spec:
+  generators:
+  - pullRequest:
+      github:
+        # The GitHub organization or user.
+        owner: salesdemocf
+        # The Github repository
+        repo: poc-demo-1-demo-app
+        # Reference to a Secret containing an access token. (optional)
+        tokenRef:
+          secretName: poc-demo-1-git-password
+          key: password
+        # Labels is used to filter the PRs that you want to target. (optional)
+        labels:
+        - preview
+      requeueAfterSeconds: 1800
+  template:
+    metadata:
+      name: eva-pr-{{number}}
+    spec:
+      source:
+        repoURL: 'https://github.com/salesdemocf/poc-demo-1-demo-app.git'
+        targetRevision: {{head_sha}}
+        path: example-voting-app/
+        helm:
+          parameters:
+          - name: vote.image.tag
+            value: pr-{{number}}-{{branch}}-{{head_short_sha_7}}
+      project: default
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: pull-requests
+      syncPolicy:
+        automated:
+          allowEmpty: true
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
