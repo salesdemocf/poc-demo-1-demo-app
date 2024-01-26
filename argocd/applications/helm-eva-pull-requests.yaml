@@ -19,19 +19,19 @@ spec:
         # Labels is used to filter the PRs that you want to target. (optional)
         labels:
         - preview
-      requeueAfterSeconds: 1800
+      requeueAfterSeconds: 60
   template:
     metadata:
       name: eva-pr-{{number}}
     spec:
       source:
         repoURL: 'https://github.com/salesdemocf/poc-demo-1-demo-app.git'
-        targetRevision: {{head_sha}}
+        targetRevision: "{{head_sha}}"
         path: example-voting-app/
         helm:
           parameters:
-          - name: vote.image.tag
-            value: pr-{{number}}-{{branch}}-{{head_short_sha_7}}
+          - name: "vote.image.tag"
+            value: "pr-{{number}}-{{branch}}-{{head_short_sha_7}}"
       project: default
       destination:
         server: https://kubernetes.default.svc
