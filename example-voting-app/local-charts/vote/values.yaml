@@ -4,7 +4,7 @@
 # name: value
 image:
   repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
-  tag: pr-105-random-vote-change-47-f2aadd2
+  tag: pr-106-random-vote-change-48-6ac586e
 redis:
   usePassword: false
 replicaCount: 1
