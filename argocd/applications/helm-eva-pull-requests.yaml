@@ -28,7 +28,7 @@ spec:
         path: example-voting-app/
         helm:
           parameters:
-          - name: "vote.image.tag"
+          - name: "result.image.tag"
             value: "pr-{{number}}-{{branch}}-{{head_short_sha_7}}"
       project: default
       destination:
