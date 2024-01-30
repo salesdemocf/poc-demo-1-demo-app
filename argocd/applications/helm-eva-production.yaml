@@ -7,15 +7,15 @@ metadata:
 spec:
   project: default
   source:
-    chart: example-voting-app
-    repoURL: https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local
-    targetRevision: 1.1.9
-    # repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
-    # targetRevision: HEAD
-    # path: example-voting-app
-    # helm:
-    #   valueFiles:
-    #     - environments/production/values.yaml
+    # chart: example-voting-app
+    # repoURL: https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local
+    # targetRevision: 1.1.9
+    repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
+    targetRevision: HEAD
+    path: example-voting-app
+    helm:
+      valueFiles:
+        - environments/production/values.yaml
   destination:
     namespace: production
     server: https://kubernetes.default.svc
