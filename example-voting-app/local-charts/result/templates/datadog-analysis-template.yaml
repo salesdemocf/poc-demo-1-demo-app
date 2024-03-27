@@ -19,7 +19,6 @@ spec:
       failureLimit: 0
       provider:
         datadog:
-          apiVersion: v2
+          apiVersion: v1
           interval: 5m
-          query: |
-            "{{ `max:kubernetes.containers.restarts{kube_service:eva-development-result-preview}` }}"
+          query: "{{ `max:kubernetes.containers.restarts{kube_service:{{args.service-name}}}` }}"
