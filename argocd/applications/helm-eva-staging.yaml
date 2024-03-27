@@ -20,10 +20,6 @@ spec:
     namespace: staging
     server: https://kubernetes.default.svc
   syncPolicy:
-    automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
     syncOptions:
       - Validate=false
       - CreateNamespace=true
