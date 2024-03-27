@@ -10,7 +10,7 @@ spec:
     - name: restarts.initial-delay
       value: "60s"
     - name: restarts.max-restarts
-      value: "4"
+      value: "1"
   metrics:
     - name: kubernetes.containers.restarts
       initialDelay: "{{ `{{args.restarts.initial-delay}}` }}"
@@ -20,5 +20,5 @@ spec:
       provider:
         datadog:
           apiVersion: v1
-          interval: 5m
+          interval: 3m
           query: "{{ `max:kubernetes.containers.restarts{kube_service:{{args.service-name}}}` }}"
