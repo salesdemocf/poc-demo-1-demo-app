@@ -22,4 +22,4 @@ spec:
           apiVersion: v2
           interval: 5m
           query: |
-            "{{ `max:kubernetes.containers.restarts{service-name:{{args.service-name}},rollouts_pod_template_hash:{{args.canary-hash}}}` }}"
+            "{{ `max:kubernetes.containers.restarts{kube_service:{{args.service-name}}}` }}"
