@@ -25,7 +25,7 @@ dependencies:
     tags:
       - queue
   - name: result
-    version: "1.0.58"
+    version: "1.0.59"
     repository: file://local-charts/result
     tags:
       - node
@@ -39,4 +39,4 @@ dependencies:
     repository: file://local-charts/worker
     tags:
       - dotnet
-appVersion: 1.1.23
+appVersion: 1.1.24

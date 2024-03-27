@@ -13,9 +13,9 @@ spec:
       value: "4"
   metrics:
     - name: kubernetes.containers.restarts
-      initialDelay: "{{ args.restarts.initial-delay }}"
+      initialDelay: {{ "'{{args.restarts.initial-delay}}'" }}
       interval: 15s
-      failureCondition: default(result, 0) > {{ args.restarts.max-restarts }}
+      failureCondition: default(result, 0) > {{ "{{args.restarts.max-restarts}}" }}
       failureLimit: 0
       provider:
         datadog:
@@ -23,4 +23,4 @@ spec:
           interval: 5m
           queries:
             # The key is arbitrary - you will use this key to refer to the query if you use a formula.
-            q: "max:kubernetes.containers.restarts{service-name:{{args.service-name}},rollouts_pod_template_hash:{{args.canary-hash}}}"
+            q: "max:kubernetes.containers.restarts{service-name:{{ "{{args.service-name}}" }},rollouts_pod_template_hash:{{ "{{args.canary-hash}}" }}}"
