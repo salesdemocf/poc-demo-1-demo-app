@@ -43,6 +43,7 @@ spec:
       analysis:
         templates:
         - templateName: curl-{{ .Chart.Name }}
+        - templateName: container-restarts-{{ .Chart.Name }}
       steps:
       - setWeight: 20
       - pause: {}
