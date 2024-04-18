@@ -1,12 +1,29 @@
 version: '1.0'
 
 stages:
+  - 'pre-promotion check'
   - clone
   - propose
   - approve
   - promote
+  - 'post-promotion check'
 
 steps:
+
+  check_source_application_status:
+    title: Confirming Source Application is Healthy and Synced
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: 'Codefresh Demo Application/gitops-environment-tests'
+      BRANCH: main
+      VARIABLE:
+        - APPLICATION=${{SOURCE_APPLICATION}}
+        - RUNTIME=${{SOURCE_RUNTIME}}
+    retry:
+      maxAttempts: 10
+      delay: 10
+    stage: 'pre-promotion check'
+
   clone_source_repo:
     title: Cloning Source Repository
     type: git-clone
@@ -19,28 +36,91 @@ steps:
     type: git-clone
     repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
     revision: main
-    stage: clone
     when:
       condition:
         all:
           SourceRepoNotTargetRepo: 'includes("${{CF_REPO_NAME}}", "${{TARGET_REPO}}") == false'
+    stage: clone
 
+  # Values Change
   environment_change_proposal:
-    title: Update Target Environment
+    title: Propose Change to Target Environment 
     type: freestyle
-    image: mikefarah/yq:4
+    image: quay.io/codefresh-contrib/yq:4
     commands:
-      - echo "Environment Before Changes"
+      - echo 'Environment Before Changes'
       - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
       - yes | cp -rf ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/${{SOURCE_FILE_PATH}}/${{SOURCE_FILE}} ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
-      - echo "Environment After Changes"
+      - echo 'Environment After Changes'
       - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
     stage: propose
+  
+  # Application Change Proposal
+  # application_change_proposal:
+  #   title: Propose Change to Target Environment 
+  #   image: mikefarah/yq:4.35.1
+  #   commands:
+  #     - export NEW_CHART_VERSION=$(yq '.spec.source.targetRevision' ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/${{SOURCE_FILE_PATH}}/${{SOURCE_FILE}})
+  #     - echo 'Before Changes'
+  #     - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+  #     - yq e -i '.spec.source.targetRevision=strenv(NEW_CHART_VERSION)' ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+  #     - echo 'After Changes'
+  #     - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+  #   stage: propose
 
   wait_for_approval:
     title: Review Candidate Report and Approve Update Plan for Release.
     type: pending-approval
     stage: approve
+    
+  confirm_source_application_status:
+    title: Confirming Source Application is Healthy and Synced
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: 'Codefresh Demo Application/gitops-environment-tests'
+      BRANCH: main
+      VARIABLE:
+        - APPLICATION=${{SOURCE_APPLICATION}}
+        - RUNTIME=${{SOURCE_RUNTIME}}
+    retry:
+      maxAttempts: 3
+      delay: 5
+    stage: promote
+    
+  # Values Change
+  environment_change:
+    title: Update Target Environment
+    type: freestyle
+    image: quay.io/codefresh-contrib/yq:4
+    commands:
+      - echo 'Environment Before Changes'
+      - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+      - yes | cp -rf ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/${{SOURCE_FILE_PATH}}/${{SOURCE_FILE}} ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+      - echo 'Environment After Changes'
+      - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+    stage: promote
+  
+  # Application Change
+  # application_change:
+  #   title: Update Target Environment
+  #   type: freestyle
+  #   image: quay.io/codefresh-contrib/yq:4
+  #   commands:
+  #     - export NEW_CHART_VERSION=$(yq '.spec.source.targetRevision' ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/${{SOURCE_FILE_PATH}}/${{SOURCE_FILE}})
+  #     - echo 'Before Changes'
+  #     - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+  #     - yq e -i '.spec.source.targetRevision=strenv(NEW_CHART_VERSION)' ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+  #     - echo 'After Changes'
+  #     - cat ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}/${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
+  #   stage: promote
+    
+  check_for_untracked_changes:
+    title: Check for GIT Diff
+    image: quay.io/codefresh-contrib/alpine/git:latest
+    working_directory: ${{CF_VOLUME_PATH}}/${{TARGET_REPO}}
+    commands:
+      - git diff --exit-code || cf_export CHANGED_FILES_FOUND=true;
+    stage: promote
 
   commit_and_push:
     title: Commit manifest
@@ -48,9 +128,36 @@ steps:
     arguments:
       repo: ${{CF_REPO_OWNER}}/${{TARGET_REPO}}
       git: salesdemocf
-      working_directory: '/codefresh/volume/${{TARGET_REPO}}'
+      working_directory: '${{CF_VOLUME_PATH}}/${{TARGET_REPO}}'
       commit_message: Promote ${{SOURCE_FILE_PATH}}/${{SOURCE_FILE}} to ${{TARGET_FILE_PATH}}/${{TARGET_FILE}}
       git_user_name: salesdemocf
       git_user_email: salesdemocf@gmail.com
       rebase: true
     stage: promote
+    when:
+      condition:
+        all:
+          whenUntrackedFilesFound: '"${{CHANGED_FILES_FOUND}}" == "true"'
+          
+  sync_app:
+    title: Sync ArgoCD app from Pipeline
+    type: argo-cd-sync
+    arguments:
+      RUNTIME: ${{TARGET_RUNTIME}}
+      APPLICATION: ${{TARGET_APPLICATION}}
+    stage: promote
+
+
+  check_target_application_status:
+    title: Confirming Target Application is Healthy and Synced
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: 'Codefresh Demo Application/gitops-environment-tests'
+      BRANCH: main
+      VARIABLE:
+        - APPLICATION=${{TARGET_APPLICATION}}
+        - RUNTIME=${{TARGET_RUNTIME}}
+    retry:
+      maxAttempts: 10
+      delay: 10
+    stage: 'post-promotion check'
