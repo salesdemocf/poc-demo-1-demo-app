@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-  tag: pr-134-break-results-service-1cda776
+  tag: pr-135-random-result-change-26-a57de41
 replicaCount: 1
