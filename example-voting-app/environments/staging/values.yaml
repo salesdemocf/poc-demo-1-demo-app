@@ -1,7 +1,7 @@
 result:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-    tag: pr-133-fix-result-failure-f344994
+    tag: pr-135-random-result-change-26-a57de41
 vote:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
