@@ -12,4 +12,4 @@ worker:
     tag: stable
 postgresql:
   auth: 
-    postgresPassword: <path:kv/data/postgres#password>
+    postgresPassword: <path:cubbyhole/data/eva#postgres_password>
