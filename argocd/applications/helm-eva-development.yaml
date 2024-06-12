@@ -19,8 +19,11 @@ spec:
     plugin:
       name: argocd-vault-plugin-helm
       env:
-        - name: ARGOCD_ENV_HELM_ARGS
-          value: -f environments/development/values.yaml
+        - name: HELM_VALUES
+          value: |
+            postgresql:
+              auth:
+                postgresPassword: <path:kv/data/postgres#password>
   destination:
     namespace: development
     server: https://kubernetes.default.svc
