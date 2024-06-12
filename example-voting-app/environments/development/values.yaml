@@ -10,3 +10,6 @@ worker:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/worker
     tag: stable
+postgresql:
+  auth: 
+    postgresPassword: <path:kv/data/postgres#password>
