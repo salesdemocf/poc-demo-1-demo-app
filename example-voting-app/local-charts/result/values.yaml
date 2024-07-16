@@ -4,5 +4,5 @@
 # name: value
 image:
   repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-  tag: pr-135-random-result-change-26-a57de41
+  tag: pr-137-update-result-ghosts-v-goblins-19a8008
 replicaCount: 1
