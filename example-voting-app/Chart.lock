@@ -13,6 +13,6 @@ dependencies:
   version: 1.0.75
 - name: worker
   repository: file://local-charts/worker
-  version: 1.0.3
-digest: sha256:917db23206f95011873530a9152074445d96227f4575f9c56b6ff944896e5ad4
-generated: "2024-04-18T18:14:00.933502495Z"
+  version: 1.0.4
+digest: sha256:8b7c6fa9b01d892c7c195dbd71f85455d82ecd6c62c246bff8aa0ac5e22f11f1
+generated: "2024-07-16T05:10:26.498357483Z"
