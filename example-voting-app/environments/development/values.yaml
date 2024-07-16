@@ -1,7 +1,7 @@
 result:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-    tag: pr-135-random-result-change-26-a57de41
+    tag: ${{RELEASE_CANDIDATE_IMAGE_TAG}}
 vote:
   image:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
@@ -11,5 +11,5 @@ worker:
     repository: codedev.jfrog.io/poc-demo-1-docker-local/worker
     tag: stable
 postgresql:
-  auth: 
+  auth:
     postgresPassword: <path:kv/data/postgres#password>
