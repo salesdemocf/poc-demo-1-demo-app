@@ -1,6 +1,8 @@
 # Using official python runtime base image
 FROM python:3.12-slim
 
+ARG PIP_INDEX_URL
+
 # add curl for healthcheck
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
