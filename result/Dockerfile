@@ -12,7 +12,7 @@ RUN apt-get update \
 WORKDIR /app
 
 # have nodemon available for local dev use (file watching)
-RUN npm config set registry https://codedev.jfrog.io
+RUN npm config set registry https://codedev.jfrog.io/artifactory/api/npm/cf-npm/
 RUN npm config set //codedev.jfrog.io/:_authToken=$NPM_TOKEN -q
 RUN echo "//codedev.jfrog.io/:_authToken=$NPM_TOKEN" > ${HOME}/.npmrc
 RUN npm install -g nodemon
