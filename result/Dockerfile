@@ -1,5 +1,7 @@
 FROM node:18-slim
 
+ARG NPN_TOKEN
+
 # add curl for healthcheck
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
