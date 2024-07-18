@@ -15,11 +15,11 @@ WORKDIR /app
 RUN npm config set registry https://codedev.jfrog.io/artifactory/api/npm/cf-npm/
 RUN npm config set //codedev.jfrog.io/:_authToken=$NPM_TOKEN -q
 RUN echo "//codedev.jfrog.io/:_authToken=$NPM_TOKEN" > ${HOME}/.npmrc
-RUN npm install -g nodemon
+RUN npm install -g nodemon --registry https://codedev.jfrog.io/artifactory/api/npm/cf-npm/
 
 COPY package*.json ./
 
-RUN npm ci \
+RUN npm ci --registry https://codedev.jfrog.io/artifactory/api/npm/cf-npm/\
  && npm cache clean --force \
  && mv /app/node_modules /node_modules
 
