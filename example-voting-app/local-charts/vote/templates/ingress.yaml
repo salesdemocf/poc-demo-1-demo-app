@@ -36,7 +36,7 @@ metadata:
     version: {{ .Values.image.tag | quote }}
 spec:
   rules:
-  - host:  {{ template "fullname" . }}.<domain>
+  - host:  {{ template "fullname" . }}.{{ .Values.domain}}
     http:
       paths:
       - path: /

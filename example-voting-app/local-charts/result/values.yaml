@@ -6,3 +6,4 @@ image:
   repository: codedev.jfrog.io/poc-demo-1-docker-local/result
   tag: pr-137-update-result-ghosts-v-goblins-19a8008
 replicaCount: 1
+domain: sales-dev.codefresh.io

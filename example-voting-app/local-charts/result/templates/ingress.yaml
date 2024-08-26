@@ -30,7 +30,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: "{{ template "fullname" . }}.<domain>"
+  - host: "{{ template "fullname" . }}.{{ .Values.domain}}"
     http:
       paths:
       - path: /
