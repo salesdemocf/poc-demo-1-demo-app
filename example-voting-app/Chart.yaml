@@ -25,7 +25,7 @@ dependencies:
     tags:
       - queue
   - name: result
-    version: "1.0.90"
+    version: "1.0.91"
     repository: file://local-charts/result
     tags:
       - node
