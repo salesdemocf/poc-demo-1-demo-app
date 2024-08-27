@@ -56,10 +56,22 @@ spec:
       - analysis:
           templates:
           - templateName: curl-{{ .Chart.Name }}
+          args:
+          - name: service-name
+            value: {{ template "fullname" . }}-preview
+          - name: canary-hash
+            valueFrom:
+              podTemplateHashValue: Latest
       - pause: {duration: 180}
       - analysis:
           templates:
           - templateName: container-restarts-{{ .Chart.Name }}
+          args:
+          - name: service-name
+            value: {{ template "fullname" . }}-preview
+          - name: canary-hash
+            valueFrom:
+              podTemplateHashValue: Latest
       - setWeight: 40
       - pause: {duration: 10}
       - setWeight: 60
