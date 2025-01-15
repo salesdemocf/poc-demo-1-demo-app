@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
     targetRevision: HEAD
-    path: environments/staging
+    path: example-voting-app/environments/staging
   destination:
     namespace: staging
     server: https://kubernetes.default.svc
