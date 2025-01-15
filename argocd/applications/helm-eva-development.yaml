@@ -9,7 +9,7 @@ spec:
   sources:
   - repoURL: 'https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local'
     chart: example-voting-app
-    targetRevision: 1.1.56
+    targetRevision: 1.1.48
     plugin:
       name: argocd-vault-plugin-helm
       env:
