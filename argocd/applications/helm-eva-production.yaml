@@ -20,6 +20,10 @@ spec:
     namespace: production
     server: https://kubernetes.default.svc
   syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
     syncOptions:
       - Validate=false
       - CreateNamespace=true
