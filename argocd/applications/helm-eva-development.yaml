@@ -6,10 +6,19 @@ metadata:
     codefresh.io/product: example-voting-app
 spec:
   project: default
-  source:
-    repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
-    targetRevision: HEAD
-    path: example-voting-app/environments/development
+  sources:
+  - repoURL: 'https://codedev.jfrog.io/artifactory/api/helm/poc-demo-1-helm-local'
+    chart: example-voting-app
+    targetRevision: 1.1.56
+    plugin:
+      name: argocd-vault-plugin-helm
+      env:
+        - name: HELM_ARGS
+          value: -f $values/values.yaml
+  - repoURL: 'https://github.com/salesdemocf/poc-demo-1-demo-app.git'
+    targetRevision: head
+    path: environments/development
+    ref: values
   destination:
     namespace: development
     server: https://kubernetes.default.svc
