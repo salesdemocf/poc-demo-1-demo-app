@@ -13,4 +13,4 @@ example-voting-app:
       tag: stable
   postgresql:
     auth:
-      postgresPassword: postgres
+      postgresPassword: <path:kv/data/postgres#password>
