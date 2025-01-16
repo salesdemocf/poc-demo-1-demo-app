@@ -14,3 +14,6 @@ example-voting-app:
   postgresql:
     auth:
       postgresPassword: <path:kv/data/postgres#password>
+result:
+  image:
+    tag: pr-145-result-modification-9-6961081
