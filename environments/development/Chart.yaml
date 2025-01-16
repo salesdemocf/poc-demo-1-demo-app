@@ -1,0 +1,17 @@
+apiVersion: v2
+description: Helm Chart for Docker Samples example-voting-app
+name: example-voting-app
+keywords:
+  - codefresh
+  - kubernetes
+  - example-voting-app
+version: 1.1.56
+sources:
+  - https://github.com/aperture-sci/example-voting-app
+maintainers:
+  - name: Dustin Van Buskirk
+    email: dustin@codefresh.io
+dependencies:
+  - name: result
+    version: "1.0.91"
+    repository: file://../../example-voting-app
