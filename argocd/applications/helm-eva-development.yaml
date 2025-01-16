@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
     targetRevision: HEAD
-    path: example-voting-app/environments/development
+    path: environments/development
     plugin:
       name: argocd-vault-plugin-helm
       env:
