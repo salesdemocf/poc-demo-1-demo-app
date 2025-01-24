@@ -2,7 +2,7 @@ example-voting-app:
   result:
     image:
       repository: codedev.jfrog.io/poc-demo-1-docker-local/result
-      tag: pr-147-result-modification-11-bb90a05
+      tag: pr-148-result-modification-12-f1d9b46
   vote:
     image:
       repository: codedev.jfrog.io/poc-demo-1-docker-local/vote
