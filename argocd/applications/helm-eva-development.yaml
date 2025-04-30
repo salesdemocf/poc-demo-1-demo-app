@@ -10,11 +10,6 @@ spec:
     repoURL: https://github.com/salesdemocf/poc-demo-1-demo-app.git
     targetRevision: HEAD
     path: environments/development
-    plugin:
-      name: argocd-vault-plugin-helm
-      env:
-        - name: HELM_ARGS
-          value: -f values.yaml
   destination:
     namespace: development
     server: https://kubernetes.default.svc
